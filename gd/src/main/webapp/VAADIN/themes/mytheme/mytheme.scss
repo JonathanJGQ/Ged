@@ -1,0 +1,96 @@
+// If you edit this file you need to compile the theme. See README.md for details.
+
+// Global variable overrides. Must be declared before importing Valo.
+
+// Defines the plaintext font size, weight and family. Font size affects general component sizing.
+//$v-font-size: 16px;
+//$v-font-weight: 300;
+//$v-font-family: "Open Sans", sans-serif;
+
+// Defines the border used by all components.
+//$v-border: 1px solid (v-shade 0.7);
+//$v-border-radius: 4px;
+
+// Affects the color of some component elements, e.g Button, Panel title, etc
+//$v-background-color: hsl(210, 0%, 98%);
+// Affects the color of content areas, e.g  Panel and Window content, TextField input etc
+//$v-app-background-color: $v-background-color;
+
+// Affects the visual appearance of all components
+//$v-gradient: v-linear 8%;
+//$v-bevel-depth: 30%;
+//$v-shadow-opacity: 5%;
+
+// Defines colors for indicating status (focus, success, failure)
+//$v-focus-color: valo-focus-color(); // Calculates a suitable color automatically
+//$v-friendly-color: #2c9720;
+//$v-error-indicator-color: #ed473b;
+
+// For more information, see: https://vaadin.com/book/-/page/themes.valo.html
+// Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
+
+@import "../valo/valo.scss";
+
+@mixin mytheme {
+  @include valo;
+
+	.backColorBlue{
+		background-color:#043F68;
+	}
+	
+	.backColorWhite{
+		background-color:#FFFFFF;
+	}
+	
+	.backColorGreen{
+		background-color:#1C8537;
+	}
+	
+	.backColorGreenLight{
+		background-color:#0eef82;
+	}
+	
+	.styleButton{
+		background-color: #F7F7F7;
+	    color: black;
+	    border: 2px solid #F7F7F7;
+	    height: 100px;
+	    width: 150px;
+	}
+	
+	.whiteIcon .v-icon {
+    color: white;
+	}
+	
+	.menuButton{
+		background-color: #043F68;
+		color: white;
+		height: 98px;
+		font-weight: bold;
+		border: 0px;
+		border-radius: 0px;
+		background-image: none;
+		box-shadow: none;
+	}
+	
+	.iconNumber{
+		font-weight: bold;
+		color: black;
+		font-size: 100%;
+		white-space: pre;
+		text-align: center;
+		content: inherit;
+		vertical-align: bottom;
+	}
+	
+	.menuTitle{
+		background-color: #ffffff;
+		padding: 12px 55px;
+		text-align: center;
+	}
+	
+	.menuIcons{
+		display: block;
+		font-size: 20;
+	}
+}
