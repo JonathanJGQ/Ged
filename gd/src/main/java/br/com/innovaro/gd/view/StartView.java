@@ -1,5 +1,8 @@
 package br.com.innovaro.gd.view;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -74,38 +77,66 @@ public class StartView extends VerticalLayout implements View{
 		
 		Button btn1 = new Button("GEOPM - Operação e Manutenção");
 		Button btn2 = new Button("GENGE - Engenharia");
-		Button btn3 = new Button("GQSMS - Qualidade, Segurança, Meio Ambiente e Saúde");
+		Button btn3 = new Button("GQSMS - Qualidade, Segurança, Meio Ambiente ...");
 		Button btn4 = new Button("GECOM - Comercial");
 		Button btn5 = new Button("GERTI - Tecnologia da Informação");
 		Button btn6 = new Button("GPLAN - Planejamento");
+		Button btn7 = new Button("ASCOM - Comunicação");
+		Button btn8 = new Button("GERAS - Suprimentos");
+		Button btn9 = new Button("GEREH - Recursos Humanos");
+		Button btn10 = new Button("GCONT - Contabilidade");
+		Button btn11 = new Button("GEFIN - Financeiro");
+		Button btn12 = new Button("ASJUR - Jurídico");
+		Button btn13 = new Button("ASDIR - Assesoria");
 		
-		btn1.setWidth(500,Unit.PIXELS);
-		btn2.setWidth(500,Unit.PIXELS);
-		btn3.setWidth(500,Unit.PIXELS);
-		btn4.setWidth(500,Unit.PIXELS);
-		btn5.setWidth(500,Unit.PIXELS);
-		btn6.setWidth(500,Unit.PIXELS);
+		int btnSize = 400;
+		
+		btn1.setWidth(btnSize,Unit.PIXELS);
+		btn2.setWidth(btnSize,Unit.PIXELS);
+		btn3.setWidth(btnSize,Unit.PIXELS);
+		btn4.setWidth(btnSize,Unit.PIXELS);
+		btn5.setWidth(btnSize,Unit.PIXELS);
+		btn6.setWidth(btnSize,Unit.PIXELS);
+		btn7.setWidth(btnSize,Unit.PIXELS);
+		btn8.setWidth(btnSize,Unit.PIXELS);
+		btn9.setWidth(btnSize,Unit.PIXELS);
+		btn10.setWidth(btnSize,Unit.PIXELS);
+		btn11.setWidth(btnSize,Unit.PIXELS);
+		btn12.setWidth(btnSize,Unit.PIXELS);
+		btn13.setWidth(btnSize,Unit.PIXELS);
+		
+		HorizontalLayout todosBotoesLayout = new HorizontalLayout();
+		todosBotoesLayout.setMargin(false);
 		
 		VerticalLayout botoesLayout = new VerticalLayout();
-		botoesLayout.addComponents(btn1,btn2,btn3,btn4,btn5,btn6);
+		botoesLayout.addComponents(btn1,btn2,btn3,btn4,btn5,btn6,btn7);
+		botoesLayout.setMargin(false);
+		
+		VerticalLayout botoesLayout2 = new VerticalLayout();
+		botoesLayout2.addComponents(btn8,btn9,btn10,btn11,btn12,btn13);
+		botoesLayout2.setMargin(false);
+		
+		todosBotoesLayout.addComponents(botoesLayout,botoesLayout2);
 		
 		CssLayout pesquisarLayout = new CssLayout();
 		TextField pesquisa = new TextField();
+		pesquisa.setWidth(500,Unit.PIXELS);
 		Button btnPesquisar = new Button(VaadinIcons.SEARCH);
 		pesquisarLayout.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+		pesquisa.setPlaceholder("Pesquisar");
 		pesquisa.setDescription("Pesquisar");
 		
 		pesquisarLayout.addComponents(pesquisa,btnPesquisar);
 		
 		layoutHorizontal.addComponents(documento,documentosRevisar,documentosAprovar,template);
-		addComponents(pesquisarLayout,botoesLayout);
-		setComponentAlignment(botoesLayout, Alignment.MIDDLE_CENTER);
+		addComponents(pesquisarLayout,todosBotoesLayout);
+		setComponentAlignment(todosBotoesLayout, Alignment.MIDDLE_CENTER);
 		setComponentAlignment(pesquisarLayout, Alignment.MIDDLE_RIGHT);
 	}
 	
 	@Override
     public void enter(ViewChangeEvent event) {
-        Notification.show("Bem Vindo");
+        //Notification.show("Bem Vindo");
     }
 			
 }

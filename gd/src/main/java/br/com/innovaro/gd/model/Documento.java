@@ -3,9 +3,10 @@ package br.com.innovaro.gd.model;
 public class Documento {
 	private long id;
 	private long idTemplate;
-	private String titulo;
+	private String nome;
 	private String descricao;
 	private String autor;
+	private String status;
 	
 	public long getId() {
 		return id;
@@ -19,11 +20,11 @@ public class Documento {
 	public void setIdTemplate(long idTemplate) {
 		this.idTemplate = idTemplate;
 	}
-	public String getTitulo() {
-		return titulo;
+	public String getNome() {
+		return nome;
 	}
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 	public String getDescricao() {
 		return descricao;
@@ -37,4 +38,11 @@ public class Documento {
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 }

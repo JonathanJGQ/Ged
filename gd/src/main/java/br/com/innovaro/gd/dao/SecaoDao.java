@@ -1,31 +1,17 @@
 package br.com.innovaro.gd.dao;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Query;
 
 import br.com.innovaro.gd.model.Secao;
 
-public class SecaoDao {
-	public static List<Secao> secoes = new ArrayList<>();
+public class SecaoDao extends GenericDao<Secao,Long>{
 	
-	public void add(Secao secao) {
-		secoes.add(secao);
+	@SuppressWarnings("unchecked")
+	public List<Secao> buscaSecaoPorModelo(Long modelo_id){
+		Query query = entityManager.createQuery("FROM Secao WHERE idtemplate = '" + modelo_id + "'");
+		return query.getResultList();
 	}
 	
-	public List buscaSecao(long id) {
-		List<Secao> lista = new ArrayList<>();
-		
-		for (Secao secao : lista) {
-			System.out.println(secao.getIdTemplate());
-			if(secao.getIdTemplate() == id) {
-				lista.add(secao);
-				System.out.println("Pegou");
-			}
-		}
-		return lista;
-	}
-	
-	public void remove(Secao secao) {
-		this.secoes.remove(secao);
-	}
 }

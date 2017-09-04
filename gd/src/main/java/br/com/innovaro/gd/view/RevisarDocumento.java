@@ -42,10 +42,10 @@ public class RevisarDocumento extends VerticalLayout implements View{
 		
 		
 		Button revisao = new Button("Enviar para Aprovação");
-		revisao.setStyleName("backColorGreenLight");
+		revisao.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 		
 		Button retornar = new Button("Retornar para Edição");
-		retornar.setStyleName("backColorGreenLight");
+		retornar.setStyleName(ValoTheme.BUTTON_DANGER);
 		
 		HorizontalLayout buttonsLayout = new HorizontalLayout();
 		buttonsLayout.addComponents(retornar,revisao);

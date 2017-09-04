@@ -11,9 +11,11 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.com.innovaro.gd.BundleStrings;
+
 public class AprovarDocumento extends VerticalLayout implements View{
 	public AprovarDocumento() {
-		Label title = new Label("Aprovar Documento");
+		Label title = new Label(BundleStrings.getString("aprovar_documento"));
         title.setSizeUndefined();
         title.addStyleName(ValoTheme.LABEL_H1);
         title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
@@ -42,10 +44,10 @@ public class AprovarDocumento extends VerticalLayout implements View{
 		
 		
 		Button revisao = new Button("Aprovar");
-		revisao.setStyleName("backColorGreenLight");
+		revisao.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 		
 		Button retornar = new Button("Retornar para Edição");
-		retornar.setStyleName("backColorGreenLight");
+		retornar.setStyleName(ValoTheme.BUTTON_DANGER);
 		
 		HorizontalLayout buttonsLayout = new HorizontalLayout();
 		buttonsLayout.addComponents(retornar,revisao);

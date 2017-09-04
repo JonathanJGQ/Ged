@@ -2,18 +2,17 @@ package br.com.innovaro.gd.view;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
+import br.com.innovaro.gd.BundleStrings;;
 
 public enum DashboardViewType {
-    INICIO("Início", StartView.class, VaadinIcons.HOME,true), DOCUMENTO(
-            "Novo Documento", DocumentoView.class, VaadinIcons.FILE_O, true),  REVISAR(
-            "Revisão de Documento", RevisarDocumentoView.class, VaadinIcons.FILE_REFRESH, true), APROVAR(
-            "Aprovação de Documento", AprovarDocumentoView.class, VaadinIcons.THUMBS_UP_O, false),MODELO(
-            "Modelo de Documento", TemplateView.class, VaadinIcons.FILE_FONT, false), CABECALHO(
-    		"Cabeçalho e Rodapé",null,VaadinIcons.BOOK,false), TIPOREG(
-    		"Tipo de Registro",null,VaadinIcons.CLIPBOARD,false), REGISTRO(
-    		"Inclusão de Registro",null,VaadinIcons.CLIPBOARD_TEXT,false);
+    INICIO(BundleStrings.getString("inicio"), StartView.class, VaadinIcons.HOME,true), DOCUMENTO(
+    		BundleStrings.getString("editar_documento"), DocumentoView.class, VaadinIcons.FILE_O, true),  REVISAR(
+    		BundleStrings.getString("revisar_documento"), RevisarDocumentoView.class, VaadinIcons.FILE_REFRESH, true), APROVAR(
+    		BundleStrings.getString("aprovar_documento"), AprovarDocumentoView.class, VaadinIcons.THUMBS_UP_O, false), REGISTRO(
+    		BundleStrings.getString("incluir_registro"),IncluirRegistroView.class,VaadinIcons.CLIPBOARD_TEXT,false),CONFIGURACAO(
+    		BundleStrings.getString("configuracoes"),null,VaadinIcons.COG_O,false),TESTE(
+    				"Teste",null,VaadinIcons.HOME,false);
 
     private final String viewName;
     private final Class<? extends View> viewClass;

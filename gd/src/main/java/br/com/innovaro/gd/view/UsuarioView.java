@@ -14,6 +14,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class UsuarioView extends VerticalLayout implements View{
+
 	public UsuarioView() {
 		
 		Label novoUsuario = new Label("<b>NOVO USUÁRIO<b>",ContentMode.HTML);
