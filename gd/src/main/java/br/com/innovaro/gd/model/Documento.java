@@ -1,6 +1,7 @@
 package br.com.innovaro.gd.model;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,9 +21,9 @@ public class Documento {
 	private String autor;
 	private String status;
 	@Temporal(TemporalType.DATE)
-	private Calendar vigencia_inicio;
+	private Date vigencia_inicio;
 	@Temporal(TemporalType.DATE)
-	private Calendar vigencia_fim;
+	private Date vigencia_fim;
 	private String versao;
 	
 	public Long getId() {
@@ -61,16 +62,16 @@ public class Documento {
 	public void setVersao(String versao) {
 		this.versao = versao;
 	}
-	public Calendar getVigencia_inicio() {
+	public Date getVigencia_inicio() {
 		return vigencia_inicio;
 	}
-	public void setVigencia_inicio(Calendar vigencia_inicio) {
+	public void setVigencia_inicio(Date vigencia_inicio) {
 		this.vigencia_inicio = vigencia_inicio;
 	}
-	public Calendar getVigencia_fim() {
+	public Date getVigencia_fim() {
 		return vigencia_fim;
 	}
-	public void setVigencia_fim(Calendar vigencia_fim) {
+	public void setVigencia_fim(Date vigencia_fim) {
 		this.vigencia_fim = vigencia_fim;
 	}
 }

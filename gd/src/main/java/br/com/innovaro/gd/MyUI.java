@@ -24,6 +24,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.com.innovaro.gd.editor.EditorView;
 import br.com.innovaro.gd.event.DashboardEventBus;
 import br.com.innovaro.gd.view.AjudaView;
 import br.com.innovaro.gd.view.AmbienteView;
@@ -37,7 +38,6 @@ import br.com.innovaro.gd.view.MenuView;
 import br.com.innovaro.gd.view.ModeloDocumentoView;
 import br.com.innovaro.gd.view.ModeloRegistroView;
 import br.com.innovaro.gd.view.NovoRegistroView;
-import br.com.innovaro.gd.view.EditorView;
 import br.com.innovaro.gd.view.RevisarDocumento;
 import br.com.innovaro.gd.view.RevisarDocumentoView;
 import br.com.innovaro.gd.view.StartView;
@@ -121,7 +121,6 @@ public class MyUI extends UI {
         navigator.addView("Tela Revisar Documento",new RevisarDocumento());
         navigator.addView("Tela Aprovar Documento",new AprovarDocumento());
         navigator.addView("Incluir Registro",new IncluirRegistroView());
-        navigator.addView("Teste",new EditorView());
         navigator.addView("documentosAprovados", new DocumentosAprovadosView());
         navigator.addView("Ajuda", new AjudaView());
         navigator.addView("Ambiente", new AmbienteView());
