@@ -37,10 +37,10 @@ import br.com.innovaro.gd.view.MenuView;
 import br.com.innovaro.gd.view.ModeloDocumentoView;
 import br.com.innovaro.gd.view.ModeloRegistroView;
 import br.com.innovaro.gd.view.NovoRegistroView;
+import br.com.innovaro.gd.view.EditorView;
 import br.com.innovaro.gd.view.RevisarDocumento;
 import br.com.innovaro.gd.view.RevisarDocumentoView;
 import br.com.innovaro.gd.view.StartView;
-import br.com.innovaro.gd.view.editor.ReportsView;
 
 
 @Theme("mytheme")
@@ -113,7 +113,7 @@ public class MyUI extends UI {
         navigator.addView("Modelo de Documento", new ModeloDocumentoView());
         navigator.addView("editarModelo",new EditarModeloDocumentoView());
         navigator.addView("Editar Documento", new ListarDocumentoView());
-        navigator.addView("novoDocumento", new ReportsView());
+        navigator.addView("novoDocumento", new EditorView());
         navigator.addView("Revisar Documento",new RevisarDocumentoView());
         navigator.addView("Aprovar Documento",new AprovarDocumentoView());
         navigator.addView("Modelo de Registro",new ModeloRegistroView());
@@ -121,7 +121,7 @@ public class MyUI extends UI {
         navigator.addView("Tela Revisar Documento",new RevisarDocumento());
         navigator.addView("Tela Aprovar Documento",new AprovarDocumento());
         navigator.addView("Incluir Registro",new IncluirRegistroView());
-        navigator.addView("Teste",new ReportsView());
+        navigator.addView("Teste",new EditorView());
         navigator.addView("documentosAprovados", new DocumentosAprovadosView());
         navigator.addView("Ajuda", new AjudaView());
         navigator.addView("Ambiente", new AmbienteView());

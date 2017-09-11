@@ -1,4 +1,4 @@
-package br.com.innovaro.gd.view.editor;
+package br.com.innovaro.gd;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,14 +24,14 @@ import br.com.innovaro.gd.dao.ConteudoDao;
 import br.com.innovaro.gd.model.Conteudo;
 
 @SuppressWarnings({ "serial", "unchecked" })
-public final class ReportEditor extends VerticalLayout {
+public final class EditorUtil extends VerticalLayout {
 
     private final ReportEditorListener listener;
     private SortableLayout canvas;
     public List<Component> components;
     private ConteudoDao daoConteudo;
 
-    public ReportEditor(final ReportEditorListener listener) {
+    public EditorUtil(final ReportEditorListener listener) {
     	components = new ArrayList<>();
     	daoConteudo = new ConteudoDao();
         this.listener = listener;
@@ -115,7 +115,7 @@ public final class ReportEditor extends VerticalLayout {
                 if (t == null || t.equals("")) {
                     t = " ";
                 }
-                listener.titleChanged(t, ReportEditor.this);
+                listener.titleChanged(t, EditorUtil.this);
             });
             layout.addComponent(titleLabel);
             
@@ -150,7 +150,7 @@ public final class ReportEditor extends VerticalLayout {
     }
 
     public interface ReportEditorListener {
-        void titleChanged(String newTitle, ReportEditor editor);
+        void titleChanged(String newTitle, EditorUtil editor);
     }
 
     public enum PaletteItemType {

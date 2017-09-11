@@ -1,9 +1,13 @@
-package br.com.innovaro.gd.view;
+package br.com.innovaro.gd.type;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Resource;
-import br.com.innovaro.gd.BundleStrings;;
+import br.com.innovaro.gd.BundleStrings;
+import br.com.innovaro.gd.view.AjudaView;
+import br.com.innovaro.gd.view.AmbienteView;
+import br.com.innovaro.gd.view.ModeloDocumentoView;
+import br.com.innovaro.gd.view.ModeloRegistroView;;
 
 public enum DashboardConfigViewType {
 	MODELO(BundleStrings.getString("modelo_de_documento"), ModeloDocumentoView.class, VaadinIcons.FILE_FONT, false),

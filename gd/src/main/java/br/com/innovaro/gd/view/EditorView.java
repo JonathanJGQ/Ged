@@ -1,4 +1,4 @@
-package br.com.innovaro.gd.view.editor;
+package br.com.innovaro.gd.view;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,16 +11,17 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.CloseHandler;
 
+import br.com.innovaro.gd.EditorUtil;
+import br.com.innovaro.gd.EditorUtil.PaletteItemType;
+import br.com.innovaro.gd.EditorUtil.ReportEditorListener;
 import br.com.innovaro.gd.dao.ConteudoDao;
 import br.com.innovaro.gd.dao.SecaoDao;
 import br.com.innovaro.gd.event.DashboardEventBus;
 import br.com.innovaro.gd.model.Conteudo;
 import br.com.innovaro.gd.model.Secao;
-import br.com.innovaro.gd.view.editor.ReportEditor.PaletteItemType;
-import br.com.innovaro.gd.view.editor.ReportEditor.ReportEditorListener;
 
 @SuppressWarnings("serial")
-public final class ReportsView extends TabSheet implements View, CloseHandler,
+public final class EditorView extends TabSheet implements View, CloseHandler,
         ReportEditorListener {
 
     public static final String CONFIRM_DIALOG_ID = "confirm-dialog";
@@ -30,12 +31,12 @@ public final class ReportsView extends TabSheet implements View, CloseHandler,
     private String estadoDocumento;
     private SecaoDao dao;
     private List<Secao> listaSecao;
-    ReportEditor reportEditor;
+    EditorUtil reportEditor;
     
-    public ReportsView() {
+    public EditorView() {
     	dao = new SecaoDao(); 
     	daoConteudo = new ConteudoDao();
-    	reportEditor = new ReportEditor(this);
+    	reportEditor = new EditorUtil(this);
         setSizeFull();
         addStyleName("reports");
         setCloseHandler(this);
@@ -88,7 +89,7 @@ public final class ReportsView extends TabSheet implements View, CloseHandler,
 	}
 
     @Override
-    public void titleChanged(final String newTitle, final ReportEditor editor) {
+    public void titleChanged(final String newTitle, final EditorUtil editor) {
         getTab(editor).setCaption(newTitle);
     }
 

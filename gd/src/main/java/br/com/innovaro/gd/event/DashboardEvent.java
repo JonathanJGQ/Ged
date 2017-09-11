@@ -1,6 +1,6 @@
 package br.com.innovaro.gd.event;
 
-import br.com.innovaro.gd.view.DashboardViewType;
+import br.com.innovaro.gd.type.DashboardViewType;
 
 /*
  * Event bus events used in Dashboard are listed here as inner classes.

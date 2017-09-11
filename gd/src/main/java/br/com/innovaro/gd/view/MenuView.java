@@ -35,6 +35,8 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 
 import br.com.innovaro.gd.event.DashboardEvent.PostViewChangeEvent;
+import br.com.innovaro.gd.type.DashboardConfigViewType;
+import br.com.innovaro.gd.type.DashboardViewType;
 import br.com.innovaro.gd.event.DashboardEventBus;
 
 

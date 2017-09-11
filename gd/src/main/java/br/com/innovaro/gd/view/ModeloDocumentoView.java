@@ -64,6 +64,7 @@ public class ModeloDocumentoView extends GenericView{
 		});
 		
 		layout = new CssLayout();
+		layout.setWidth(100,Unit.PERCENTAGE);
 		layout.addComponent(novoTemplate);
 		layout.addComponent(btnAdicionarTemplate);
 		layout.setCaption("Nome do Modelo");
@@ -91,7 +92,6 @@ public class ModeloDocumentoView extends GenericView{
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
-		lista = dao.findAll(null);
 		grid.setItems(lista);
 	}
 }

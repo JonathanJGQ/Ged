@@ -1,9 +1,14 @@
-package br.com.innovaro.gd.view;
+package br.com.innovaro.gd.type;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Resource;
-import br.com.innovaro.gd.BundleStrings;;
+import br.com.innovaro.gd.BundleStrings;
+import br.com.innovaro.gd.view.AprovarDocumentoView;
+import br.com.innovaro.gd.view.DocumentoView;
+import br.com.innovaro.gd.view.IncluirRegistroView;
+import br.com.innovaro.gd.view.RevisarDocumentoView;
+import br.com.innovaro.gd.view.StartView;;
 
 public enum DashboardViewType {
     INICIO(BundleStrings.getString("inicio"), StartView.class, VaadinIcons.HOME,true), DOCUMENTO(
