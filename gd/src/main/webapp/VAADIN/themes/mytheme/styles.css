@@ -15122,6 +15122,11 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px solid #c5c5c5;
 }
 
+.mytheme .marginTop {
+	margin-top: 24px;
+	margin-left: 24px;
+}
+
 .mytheme .v-nativebutton {
 	border-radius: 50px;
 	color: red;

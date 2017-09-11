@@ -38,7 +38,7 @@ import br.com.innovaro.gd.model.Anexo;
 import br.com.innovaro.gd.model.Registro;
 import br.com.innovaro.gd.model.RegistroCombo;
 
-public class NovoRegistroView extends VerticalLayout implements View{
+public class NovoRegistroView extends GenericView{
 	
 	private Grid<Registro> grid;
 	private List<Registro> lista;
@@ -57,10 +57,7 @@ public class NovoRegistroView extends VerticalLayout implements View{
 		anexoLayout = new HorizontalLayout();
     	anexoLayout.setMargin(false);
 		
-		Label title = new Label("Novo Tipo de Registro");
-        title.setSizeUndefined();
-        title.addStyleName(ValoTheme.LABEL_H1);
-        title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+		HorizontalLayout cabecalho = criarCabecalho("Novo Modelo de Registro", "novo_modelo_registro_ajuda");
         
         HorizontalLayout layoutHorizontal = new HorizontalLayout();
         VerticalLayout listaLayout = new VerticalLayout();
@@ -177,7 +174,7 @@ public class NovoRegistroView extends VerticalLayout implements View{
         
         
         
-        addComponents(title,nomeRegistro,layoutHorizontal,listaLayout,grid,construirAnexo());
+        addComponents(cabecalho,nomeRegistro,layoutHorizontal,listaLayout,grid,construirAnexo());
 	}
 	
 	private Component construirAnexo() {
@@ -244,7 +241,7 @@ public class NovoRegistroView extends VerticalLayout implements View{
             });
             draftThumb.addComponent(delete);
 
-            draftThumb.addLayoutClickListener(new LayoutClickListener() {
+         /*  draftThumb.addLayoutClickListener(new LayoutClickListener() {
                 @Override
                 public void layoutClick(LayoutClickEvent event) {
                     if (event.getButton() == MouseButton.LEFT
@@ -252,7 +249,7 @@ public class NovoRegistroView extends VerticalLayout implements View{
                         //addReport(ReportType.MONTHLY, null);
                     }
                 }
-            });
+            });*/
             anexoLayout.addComponent(draftThumb);
 		}
     }
@@ -283,7 +280,7 @@ public class NovoRegistroView extends VerticalLayout implements View{
     	
     	Window window = new Window();
     	VerticalLayout layout = new VerticalLayout();
-    	TextField nomeAnexo = new TextField("Nome");
+    	TextField nomeAnexo = new TextField("Caminho");
     	nomeAnexo.setWidth(100,Unit.PERCENTAGE);
     	
     	HorizontalLayout buttonsLayout = new HorizontalLayout();

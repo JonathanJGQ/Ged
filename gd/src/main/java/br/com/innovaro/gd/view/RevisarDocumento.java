@@ -11,12 +11,9 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class RevisarDocumento extends VerticalLayout implements View{
+public class RevisarDocumento extends GenericView{
 	public RevisarDocumento() {
-		Label title = new Label("Revisar Documento");
-        title.setSizeUndefined();
-        title.addStyleName(ValoTheme.LABEL_H1);
-        title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+		HorizontalLayout cabecalho = criarCabecalho("Revisar Documento", "revisar_documento_ajuda");
 		
 		HorizontalLayout codigoLayout = new HorizontalLayout();
 		
@@ -58,6 +55,6 @@ public class RevisarDocumento extends VerticalLayout implements View{
 		nota.setSizeFull();
 		nota.setHeight("300px");
 		
-		addComponents(title,codigoLayout,titulo,autor,documento,documento2,nota);
+		addComponents(cabecalho,codigoLayout,titulo,autor,documento,documento2,nota);
 	}
 }

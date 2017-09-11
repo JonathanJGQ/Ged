@@ -25,19 +25,21 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import br.com.innovaro.gd.event.DashboardEventBus;
+import br.com.innovaro.gd.view.AjudaView;
+import br.com.innovaro.gd.view.AmbienteView;
 import br.com.innovaro.gd.view.AprovarDocumento;
 import br.com.innovaro.gd.view.AprovarDocumentoView;
-import br.com.innovaro.gd.view.DocumentoView;
-import br.com.innovaro.gd.view.EditModeloView;
+import br.com.innovaro.gd.view.DocumentosAprovadosView;
+import br.com.innovaro.gd.view.EditarModeloDocumentoView;
 import br.com.innovaro.gd.view.IncluirRegistroView;
 import br.com.innovaro.gd.view.ListarDocumentoView;
 import br.com.innovaro.gd.view.MenuView;
+import br.com.innovaro.gd.view.ModeloDocumentoView;
+import br.com.innovaro.gd.view.ModeloRegistroView;
 import br.com.innovaro.gd.view.NovoRegistroView;
 import br.com.innovaro.gd.view.RevisarDocumento;
 import br.com.innovaro.gd.view.RevisarDocumentoView;
 import br.com.innovaro.gd.view.StartView;
-import br.com.innovaro.gd.view.ModeloView;
-import br.com.innovaro.gd.view.TipoRegistroView;
 import br.com.innovaro.gd.view.editor.ReportsView;
 
 
@@ -108,18 +110,21 @@ public class MyUI extends UI {
         navigator = new Navigator(UI.getCurrent(), viewDisplay);
         navigator.addView("", new StartView());
         navigator.addView("Início", new StartView());
-        navigator.addView("Modelo de Documento", new ModeloView());
-        navigator.addView("editarModelo",new EditModeloView());
+        navigator.addView("Modelo de Documento", new ModeloDocumentoView());
+        navigator.addView("editarModelo",new EditarModeloDocumentoView());
         navigator.addView("Editar Documento", new ListarDocumentoView());
         navigator.addView("novoDocumento", new ReportsView());
         navigator.addView("Revisar Documento",new RevisarDocumentoView());
         navigator.addView("Aprovar Documento",new AprovarDocumentoView());
-        navigator.addView("Tipo de Registro",new TipoRegistroView());
+        navigator.addView("Modelo de Registro",new ModeloRegistroView());
         navigator.addView("novoRegistro",new NovoRegistroView());
         navigator.addView("Tela Revisar Documento",new RevisarDocumento());
         navigator.addView("Tela Aprovar Documento",new AprovarDocumento());
         navigator.addView("Incluir Registro",new IncluirRegistroView());
         navigator.addView("Teste",new ReportsView());
+        navigator.addView("documentosAprovados", new DocumentosAprovadosView());
+        navigator.addView("Ajuda", new AjudaView());
+        navigator.addView("Ambiente", new AmbienteView());
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

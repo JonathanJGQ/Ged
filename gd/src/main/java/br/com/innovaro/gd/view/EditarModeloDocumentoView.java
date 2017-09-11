@@ -3,45 +3,45 @@ package br.com.innovaro.gd.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vaadin.data.ValueProvider;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.com.innovaro.gd.model.Secao;
 import br.com.innovaro.gd.dao.ModeloDao;
 import br.com.innovaro.gd.dao.SecaoDao;
 import br.com.innovaro.gd.model.Modelo;
-import br.com.innovaro.gd.model.Secao;
 
-public class EditModeloView extends VerticalLayout implements View{
+public class EditarModeloDocumentoView extends GenericView{
 	
 	HorizontalLayout layoutHorizontal;
 	VerticalLayout layoutVertical;
 	TextField idText = new TextField();
-	TextField nomeText = new TextField();
+	TextField nomeText = new TextField("Nome do Modelo");
 	Button alterar;
 	Modelo template;
-	List<Secao> lista;
 	SecaoDao dao;
+	List<Secao> lista;
 	ModeloDao mdao;
-	String value;
 	Grid<Secao> grid;
 	TextField novaSecao;
+	String value;
+	ComboBox totalAprovacoes;
 	
-	public EditModeloView() {
+	public EditarModeloDocumentoView() {
 		
 		dao = new SecaoDao();
 		mdao = new ModeloDao();
@@ -57,7 +57,7 @@ public class EditModeloView extends VerticalLayout implements View{
 		grid.addColumn(template -> "X",
 			    new ButtonRenderer(clickEvent -> {
 			    	 Secao secao = (Secao) clickEvent.getItem();
-			    	 dao.exclui(secao.getId());
+			    	 dao.delete(secao.getId());
 			    	 lista.remove(secao);
 			    	 grid.setItems(lista);
 			    })).setWidth(65).setCaption("");
@@ -70,28 +70,38 @@ public class EditModeloView extends VerticalLayout implements View{
 	
 	public VerticalLayout criaCampos() {
 		
-		Label title = new Label("Editar Modelo de Documento");
-        title.setSizeUndefined();
-        title.addStyleName(ValoTheme.LABEL_H1);
-        title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+		HorizontalLayout cabecalho = criarCabecalho("Editar Modelo de Documento", "editar_modelo_documento_ajuda");
 		
 		Label label = new Label("<b>MODELO<b>",ContentMode.HTML);
-		CssLayout layoutCss = new CssLayout();
+		HorizontalLayout layout = new HorizontalLayout();
 		layoutVertical = new VerticalLayout();
 		
-		
-		idText.setCaption("Código");
-		idText.setEnabled(false);
+		totalAprovacoes = new ComboBox("Total de Aprovações");
+		List<String> lista_total_aprovacoes = new ArrayList<>();
+		lista_total_aprovacoes.add("1");
+		lista_total_aprovacoes.add("2");
+		lista_total_aprovacoes.add("3");
+		lista_total_aprovacoes.add("4");
+		lista_total_aprovacoes.add("5");
+		lista_total_aprovacoes.add("6");
+		lista_total_aprovacoes.add("7");
+		lista_total_aprovacoes.add("8");
+		lista_total_aprovacoes.add("9");
+		lista_total_aprovacoes.add("10");
+		totalAprovacoes.setItems(lista_total_aprovacoes);
+		totalAprovacoes.setValue("1");
+		totalAprovacoes.setEmptySelectionAllowed(false);
 		
 		alterar = new Button("Alterar");
-		alterar.addClickListener(new ClickListener() {
-			
+		alterar.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		alterar.addClickListener(new ClickListener() {	
 			@Override
 			public void buttonClick(ClickEvent event) {
 				Modelo modelo = new Modelo();
 				modelo.setNome(nomeText.getValue());
 				modelo.setId(Long.parseLong(value));
-				mdao.atualiza(modelo);
+				modelo.setTotalAprovacoes(Integer.parseInt(totalAprovacoes.getValue().toString()));
+				mdao.update(modelo);
 				Notification.show("Nome do modelo alterado com sucesso!!", Notification.TYPE_HUMANIZED_MESSAGE);
 			}
 		});
@@ -99,10 +109,10 @@ public class EditModeloView extends VerticalLayout implements View{
 		Label separator = new Label("<hr />",ContentMode.HTML);
 		separator.setSizeFull();
 		
-		layoutCss.addComponents(nomeText,alterar);
-		layoutCss.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-		layoutCss.setCaption("Nome");
-		layoutVertical.addComponents(title,label,layoutCss, separator);
+		layout.addComponents(nomeText,totalAprovacoes,alterar);
+		layout.setComponentAlignment(alterar, Alignment.BOTTOM_LEFT);
+		layout.setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+		layoutVertical.addComponents(cabecalho,label,layout, separator);
 		
 		layoutVertical.setMargin(false);
 		
@@ -120,6 +130,7 @@ private VerticalLayout adicionarSecao() {
 		
 		
 		Button btnAdicionarSecao = new Button("Adicionar");
+		btnAdicionarSecao.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 		btnAdicionarSecao.addClickListener(new ClickListener() {
 			
 			@Override
@@ -127,7 +138,7 @@ private VerticalLayout adicionarSecao() {
 				Secao secao = new Secao();
 				secao.setIdTemplate(Long.parseLong(value));
 				secao.setNome(novaSecao.getValue());
-				dao.salva(secao);
+				dao.save(secao);
 				lista.add(secao);
 				grid.setItems(lista);
 			}
@@ -149,12 +160,11 @@ private VerticalLayout adicionarSecao() {
 	public void enter(ViewChangeEvent event) {
 		String args[] = event.getParameters().split("/");
 	    value = args[0];
-	    Modelo modelo = mdao.buscaPorId(Long.parseLong(value)); 
+	    Modelo modelo = mdao.findById(Long.parseLong(value)); 
 	    nomeText.setValue(modelo.getNome());
+	    totalAprovacoes.setValue(modelo.getTotalAprovacoes());
 	    lista = dao.buscaSecaoPorModelo(Long.parseLong(value));
 	    grid.setItems(lista);
 	    novaSecao.setValue("");
-		
 	}
-	
 }

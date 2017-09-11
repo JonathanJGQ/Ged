@@ -10,18 +10,16 @@ import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateTimeField;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class IncluirRegistroView extends VerticalLayout implements View{
+public class IncluirRegistroView extends GenericView{
 	public IncluirRegistroView() {
 		
-		Label title = new Label("Incluir Registro");
-        title.setSizeUndefined();
-        title.addStyleName(ValoTheme.LABEL_H1);
-        title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+		HorizontalLayout cabecalho = criarCabecalho("Incluir Registro", "incluir_registro_ajuda");
         
         ComboBox documento = new ComboBox("Nome do Documento");
         List<String> listaDoc = new ArrayList<>();
@@ -86,6 +84,6 @@ public class IncluirRegistroView extends VerticalLayout implements View{
         conteudo.addComponent(numCampo);
         conteudo.addComponent(btnIncluir);
         
-        addComponents(title,documento,tipoRegistro,conteudo);
+        addComponents(cabecalho,documento,tipoRegistro,conteudo);
 	}
 }

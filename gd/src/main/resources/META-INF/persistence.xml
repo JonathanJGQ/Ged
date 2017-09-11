@@ -6,27 +6,26 @@
 
 	<persistence-unit name="ged">
 	  
-	 <provider>org.hibernate.ejb.HibernatePersistence</provider>
-	
-	 <class>package br.com.innovaro.gd.model.Modelo</class>
-	 <class>package br.com.innovaro.gd.model.Secao</class>
-	
-	 <properties>
-	  <property name="javax.persistence.jdbc.driver"
-	      value="org.postgresql.Driver" />
-	  
-	  <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/ged" />
-	  
-	  <property name="javax.persistence.jdbc.user" value="postgres" />
-	  <property name="javax.persistence.jdbc.password" value="postgres" />
-	
-	  <property name="hibernate.dialect" 
-	      value="org.hibernate.dialect.PostgreSQLDialect" />
-	  
-	  <property name="hibernate.show_sql" value="true" />
-	  <property name="hibernate.format_sql" value="true" />
-	  <property name="hibernate.hbm2ddl.auto" value="update" />
-	  
-	 </properties>
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>br.com.innovaro.gd.model.Modelo</class>
+		<class>br.com.innovaro.gd.model.Secao</class>
+		<class>br.com.innovaro.gd.model.Documento</class>
+		
+		<properties>
+			<property name="javax.persistence.jdbc.driver"
+			    value="org.postgresql.Driver" />
+			
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/ged" />
+			
+			<property name="javax.persistence.jdbc.user" value="postgres" />
+			<property name="javax.persistence.jdbc.password" value="postgres" />
+			
+			<property name="hibernate.dialect" 
+			    value="org.hibernate.dialect.PostgreSQLDialect" />
+			
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+		</properties>
 	</persistence-unit>
 </persistence>

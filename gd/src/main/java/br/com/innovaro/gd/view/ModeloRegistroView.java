@@ -4,25 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.navigator.View;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-import br.com.innovaro.gd.model.Documento;
 import br.com.innovaro.gd.model.Registro;
 
-public class TipoRegistroView extends VerticalLayout implements View{
+public class ModeloRegistroView extends GenericView{
 	
-	public TipoRegistroView() {
+	public ModeloRegistroView() {
 		
-		Label title = new Label("Tipo de Registro");
-        title.setSizeUndefined();
-        title.addStyleName(ValoTheme.LABEL_H1);
-        title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+		HorizontalLayout cabecalho = criarCabecalho("Modelo de Registro", "modelo_registro_ajuda");
         
         Button novoRegistro = new Button(VaadinIcons.PLUS);
         novoRegistro.setStyleName(ValoTheme.BUTTON_FRIENDLY);
@@ -51,8 +45,7 @@ public class TipoRegistroView extends VerticalLayout implements View{
         grid.addColumn(Registro::getNome).setCaption("Nome");
         grid.setSizeFull();
         
-        addComponents(title,novoRegistro,grid);
+        addComponents(cabecalho,novoRegistro,grid);
         
 	}
-
 }

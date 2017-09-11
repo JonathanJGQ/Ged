@@ -6,108 +6,196 @@ import java.util.List;
 import java.util.Map;
 
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
+import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.com.innovaro.gd.dao.DocumentoDao;
 import br.com.innovaro.gd.dao.ModeloDao;
 import br.com.innovaro.gd.model.Documento;
 import br.com.innovaro.gd.model.Modelo;
-
-public class ListarDocumentoView extends VerticalLayout implements View{
+	
+public class ListarDocumentoView extends GenericView{
 	
 	private ModeloDao dao;
 	private List<Modelo> listaModelo;
-	private ComboBox modeloDocumento;
 	private Map<String,String> map;
-	private TextField idModelo;
+	private ComboBox comboModelo;
+	private DocumentoDao docDao;
+	private List<Documento> listaDocumentos;
+	private Grid<Documento> grid;
+	private TextField nomeDocumento;
 	
 	public ListarDocumentoView() {
 		
+		docDao = new DocumentoDao();
 		dao = new ModeloDao();
 		listaModelo = new ArrayList<>();
+		listaDocumentos = new ArrayList<>();
 		map = new HashMap<>();
 		
-		Label title = new Label("Editar Documento");
-        title.setSizeUndefined();
-        title.addStyleName(ValoTheme.LABEL_H1);
-        title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+		HorizontalLayout cabecalho = criarCabecalho("Editar Documento", "editar_documento_ajuda");
         
+		nomeDocumento = new TextField("Nome do Documento");
+		nomeDocumento.setWidth(100,Unit.PERCENTAGE);
+		
+        comboModelo = new ComboBox();
         HorizontalLayout novoDocumentoLayout = new HorizontalLayout();
+        novoDocumentoLayout.setCaption("Tipo de Modelo");
         novoDocumentoLayout.setWidth(100,Unit.PERCENTAGE);
         novoDocumentoLayout.setMargin(false);
         
+        List<String> listaModelo = new ArrayList<>();
+        listaModelo.add("Modelo 1");
+        listaModelo.add("Modelo 2");
+        listaModelo.add("Modelo 3");
+        
+        comboModelo.setItems(listaModelo);
+        comboModelo.setEmptySelectionAllowed(false);
+        comboModelo.setWidth(100,Unit.PERCENTAGE);
+        
         Button novoDocumento = new Button(VaadinIcons.PLUS);
         novoDocumento.setStyleName(ValoTheme.BUTTON_FRIENDLY);
-        modeloDocumento = new ComboBox();
-        modeloDocumento.setWidth(100,Unit.PERCENTAGE);
-        modeloDocumento.setEmptySelectionAllowed(false);
-        idModelo = new TextField();
-        idModelo.setVisible(false);
         
+        Button documentosAprovados = new Button("Documentos Aprovados");
+        documentosAprovados.addStyleName(ValoTheme.BUTTON_PRIMARY);
         
-        novoDocumentoLayout.addComponents(modeloDocumento,novoDocumento,idModelo);
+        documentosAprovados.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				UI.getCurrent().getNavigator().navigateTo("documentosAprovados");
+			}
+		});
         
         novoDocumento.addClickListener(new Button.ClickListener() {
 			@Override
 			public void buttonClick(com.vaadin.ui.Button.ClickEvent event) {
-				String args[] = modeloDocumento.getValue().toString().split(" - ");
-			    String id = args[0];
-				modeloDocumento.getValue();
-				UI.getCurrent().getNavigator().navigateTo("novoDocumento/" + id);
+				if(nomeDocumento.getValue() != "") {
+					String args[] = comboModelo.getValue().toString().split(" - ");
+				    String id = args[0];
+				    comboModelo.getValue();
+				    janelaConfirmação(Long.parseLong(id));
+				}
+				else {
+					Notification notification = new Notification("Insira um nome para o Documento!");
+					notification.setStyleName(ValoTheme.NOTIFICATION_BAR);
+					notification.setPosition(Position.TOP_CENTER);
+					notification.setDelayMsec(3000);
+					notification.show(Page.getCurrent());
+				}
 			}
 		}); 
         
+        novoDocumentoLayout.addComponents(comboModelo,novoDocumento,documentosAprovados);
+        novoDocumentoLayout.setComponentAlignment(documentosAprovados, Alignment.MIDDLE_RIGHT);
         
-        List<Documento> lista = new ArrayList<>();
-        Documento novo = new Documento();
-        novo.setNome("Documento 1");
-        novo.setStatus("Em Revisão");
-        
-        Documento novo2 = new Documento();
-        novo2.setNome("Documento 2");
-        novo2.setStatus("Em Aprovação");
-        
-        Documento novo3 = new Documento();
-        novo3.setNome("Documento 3");
-        novo3.setStatus("Em Edição");
-        
-        lista.add(novo);
-        lista.add(novo2);
-        lista.add(novo3);
-        
-        Grid<Documento> grid = new Grid<>();
-        grid.setItems(lista);
+        grid = new Grid<>();
+        grid.setItems(listaDocumentos);
         grid.addColumn(Documento::getNome).setCaption("Nome");
+        grid.addColumn(Documento::getVigencia_inicio).setCaption("Inicio").setWidth(90);
+        grid.addColumn(Documento::getVigencia_fim).setCaption("Fim").setWidth(90);
+        grid.addColumn(Documento::getVersao).setCaption("Versão").setWidth(90);
         grid.addColumn(Documento::getStatus).setCaption("Status").setWidth(150);
         //grid.addStyleName("testeGrid");
         grid.setSizeFull();
         
-        addComponents(title,novoDocumentoLayout,grid);
+        grid.addItemClickListener(new ItemClickListener() {
+			@Override
+			public void itemClick(ItemClick event) {
+				Documento documento = (Documento)event.getItem();
+				if(documento.getStatus().equals("Em Edição")) {
+					UI.getCurrent().getNavigator().navigateTo("novoDocumento/" + documento.getId() + "/" + documento.getIdTemplate() + "/edita");
+				}
+			}
+		});
         
+        addComponents(cabecalho,nomeDocumento,novoDocumentoLayout,grid);
 	}
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
-		listaModelo = dao.buscaTodos(null);
+		listaModelo = dao.findAll(null);
 		List<String> lista = new ArrayList<>();
 		for (Modelo modelo : listaModelo) {
 			lista.add(modelo.getId() + " - " + modelo.getNome());
 		}
-		modeloDocumento.setItems(lista);
-		if(lista == null) {
-			modeloDocumento.setValue("");
+		comboModelo.setItems(lista);
+		if(lista.size() == 0) {
+			comboModelo.setValue("");
 		}
 		else {
-			modeloDocumento.setValue(lista.get(0));
+			comboModelo.setValue(lista.get(0));
 		}
+		
+		listaDocumentos = docDao.buscaDocumentosNaoAprovados();
+		grid.setItems(listaDocumentos);
+	}
+	
+	private void janelaConfirmação(Long id) {
+		VerticalLayout content = new VerticalLayout();
+		
+		Window window = new Window();
+
+		Label txtLabel = new Label("Deseja criar um novo documento?",ContentMode.HTML);
+		
+		HorizontalLayout btnLayout = new HorizontalLayout();
+		Button sim = new Button("Sim");
+		sim.addStyleName(ValoTheme.BUTTON_FRIENDLY);
+		Button nao = new Button("Não");
+		nao.addStyleName(ValoTheme.BUTTON_DANGER);
+		
+		btnLayout.addComponents(sim, nao);
+		
+		sim.addClickListener(new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				
+				DocumentoDao dao = new DocumentoDao();
+				Documento doc = new Documento();
+				doc.setIdTemplate(id);
+				doc.setStatus("Em Edição");
+				doc.setVersao("1.0");
+				doc.setNome(nomeDocumento.getValue());
+				
+				dao.save(doc);
+				UI.getCurrent().getNavigator().navigateTo("novoDocumento/" + doc.getId() + "/" +id + "/novo");
+				window.close();
+			}
+		});
+		
+		nao.addClickListener(new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				window.close();
+			}
+		});
+		
+		window.setModal(true);
+		window.center();
+		window.setClosable(true);
+		window.setWidth(400, Unit.PIXELS);
+		
+		content.addComponents(txtLabel,btnLayout);
+		window.setContent(content);
+		
+		UI.getCurrent().addWindow(window);
 	}
 }

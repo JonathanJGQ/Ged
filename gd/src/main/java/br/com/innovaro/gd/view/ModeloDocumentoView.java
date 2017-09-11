@@ -6,23 +6,25 @@ import java.util.List;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinServletService;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 
 import br.com.innovaro.gd.dao.ModeloDao;
 import br.com.innovaro.gd.model.Modelo;
-import br.com.innovaro.gd.model.Secao;
 
-public class ModeloView extends VerticalLayout implements View{
+public class ModeloDocumentoView extends GenericView{
 	
 	private Grid<Modelo> grid;
 	List<Modelo> lista;
@@ -31,18 +33,15 @@ public class ModeloView extends VerticalLayout implements View{
 	Button btnAdicionarTemplate;
 	CssLayout layout;
 	
-	public ModeloView() {
+	public ModeloDocumentoView() {
 		
 		dao = new ModeloDao();
 		lista = new ArrayList<>();
 		
-		Label title = new Label("Modelo de Documento");
-        title.setSizeUndefined();
-        title.addStyleName(ValoTheme.LABEL_H1);
-        title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+		HorizontalLayout cabecalho = criarCabecalho("Modelo de Documento", "modelo_documento_ajuda");
 		
 		criarGrid();
-		addComponents(title,adicionarTemplate());
+		addComponents(cabecalho,adicionarTemplate());
 		addComponents(grid);
 	}
 	
@@ -57,7 +56,8 @@ public class ModeloView extends VerticalLayout implements View{
 			public void buttonClick(ClickEvent event) {
 				Modelo novo = new Modelo();
 				novo.setNome(novoTemplate.getValue());
-				dao.salva(novo);
+				novo.setTotalAprovacoes(1);
+				dao.save(novo);
 				lista.add(novo);
 				grid.setItems(lista);
 			}
@@ -80,7 +80,7 @@ public class ModeloView extends VerticalLayout implements View{
 		grid.addColumn(template -> "X",
 			    new ButtonRenderer(clickEvent -> {
 			    	 Modelo modelo = (Modelo) clickEvent.getItem();
-			    	 dao.exclui(modelo.getId());
+			    	 dao.delete(modelo.getId());
 			    	 lista.remove(modelo);
 			    	 grid.setItems(lista);
 			    })).setWidth(65).setCaption("");
@@ -91,7 +91,7 @@ public class ModeloView extends VerticalLayout implements View{
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
-		lista = dao.buscaTodos(null);
+		lista = dao.findAll(null);
 		grid.setItems(lista);
 	}
 }

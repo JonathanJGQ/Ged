@@ -6,12 +6,14 @@ import com.vaadin.server.Resource;
 import br.com.innovaro.gd.BundleStrings;;
 
 public enum DashboardConfigViewType {
-	MODELO(BundleStrings.getString("modelo_de_documento"), ModeloView.class, VaadinIcons.FILE_FONT, false), CABECALHO(
-		   BundleStrings.getString("cabecalho_e_rodape"),null,VaadinIcons.ACCORDION_MENU,false), TIPOREG(
-		   BundleStrings.getString("tipo_de_registro"),null,VaadinIcons.CLIPBOARD,false),CODIFICACAO(
-		   BundleStrings.getString("codigo_do_documento"),null,VaadinIcons.BARCODE,false),PROCESSOS(
-		   BundleStrings.getString("processos"),null,VaadinIcons.ARCHIVE,false),PAPEIS(
-		   BundleStrings.getString("papeis"),null,VaadinIcons.CLIPBOARD_USER,false);
+	MODELO(BundleStrings.getString("modelo_de_documento"), ModeloDocumentoView.class, VaadinIcons.FILE_FONT, false),
+	TIPOREG(BundleStrings.getString("modelo_de_registro"),ModeloRegistroView.class,VaadinIcons.CLIPBOARD,false),
+	CABECALHO(BundleStrings.getString("cabecalho_e_rodape"),null,VaadinIcons.ACCORDION_MENU,false),
+	CODIFICACAO(BundleStrings.getString("codigo_do_documento"),null,VaadinIcons.BARCODE,false),
+	PROCESSOS(BundleStrings.getString("processos"),null,VaadinIcons.ARCHIVE,false),
+	PAPEIS(BundleStrings.getString("papeis"),null,VaadinIcons.CLIPBOARD_USER,false),
+	AMBIENTE(BundleStrings.getString("ambiente"),AmbienteView.class,VaadinIcons.GLOBE,false),
+	AJUDA(BundleStrings.getString("ajuda"),AjudaView.class,VaadinIcons.QUESTION_CIRCLE_O,false);
 
     private final String viewName;
     private final Class<? extends View> viewClass;

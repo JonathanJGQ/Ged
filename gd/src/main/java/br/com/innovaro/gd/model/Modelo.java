@@ -8,23 +8,24 @@ import javax.persistence.Id;
 public class Modelo {
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 	private String nome;
+	private int totalAprovacoes;
 	
 	public Modelo() {
 		super();
 	}
 	
-	public Modelo(long id, String nome) {
+	public Modelo(Long id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
 	}
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getNome() {
@@ -33,4 +34,13 @@ public class Modelo {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
+	public int getTotalAprovacoes() {
+		return totalAprovacoes;
+	}
+
+	public void setTotalAprovacoes(int totalAprovacoes) {
+		this.totalAprovacoes = totalAprovacoes;
+	}
+	
 }

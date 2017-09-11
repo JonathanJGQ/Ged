@@ -2,50 +2,57 @@ package br.com.innovaro.gd.component;
 
 import com.vaadin.data.HasValue.ValueChangeEvent;
 import com.vaadin.data.HasValue.ValueChangeListener;
-import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.RichTextArea;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
-import br.com.innovaro.gd.dao.ModeloDao;
-import br.com.innovaro.gd.model.Modelo;
+import br.com.innovaro.gd.dao.ConteudoDao;
+import br.com.innovaro.gd.model.Conteudo;
 
 @SuppressWarnings("serial")
 public class InlineTextEditor extends CustomComponent {
 
     private final Component editor;
+    private final ConteudoDao dao;
     private final Component readOnly;
+    private final Long idConteudo; 
     private final Label text = new Label();
     private final RichTextArea rtaReadOnly = new RichTextArea();
 
-    public InlineTextEditor(final String initialValue) {
+    public InlineTextEditor(final String initialValue, String textContent, Long idConteudo) {
+    	dao = new ConteudoDao();
         setWidth(100.0f, Unit.PERCENTAGE);
         addStyleName("inline-text-editor");
-        
-        if (initialValue != null) {
-            editor = buildEditor(initialValue);
-            readOnly = buildReadOnly(initialValue);
-        } else {
-            editor = buildEditor("SEÇÃO");
-            readOnly = buildReadOnly("Enter text here...");
-        }
+        this.idConteudo = idConteudo;
 
-        setCompositionRoot(editor);
+        if (initialValue != null) {
+            editor = buildEditor(initialValue,textContent);
+            readOnly = buildReadOnly(initialValue,textContent);
+        } else {
+            editor = buildEditor("SEÇÃO",textContent);
+            readOnly = buildReadOnly("Enter text here...",textContent);
+        }
+        if(textContent.equals("")) {
+        	setCompositionRoot(editor);
+        }
+        else {
+        	setCompositionRoot(readOnly);
+        }
     }
 
-    private Component buildReadOnly(final String initialValue) {
+    private Component buildReadOnly(final String initialValue,String textContent) {
     	rtaReadOnly.addStyleName("lineBreak");
     	rtaReadOnly.setWidth(100.0f, Unit.PERCENTAGE);
     	rtaReadOnly.setReadOnly(true);
     	rtaReadOnly.addStyleName("noBorder");
+    	rtaReadOnly.setValue(textContent);
     	
         text.setValue(initialValue);
         text.setContentMode(ContentMode.HTML);
@@ -67,8 +74,9 @@ public class InlineTextEditor extends CustomComponent {
         return result;
     }
 
-    private Component buildEditor(final String initialValue) {
+    private Component buildEditor(final String initialValue, String textContent) {
         final RichTextArea rta = new RichTextArea(initialValue);
+        rta.setValue(textContent);
         rta.addStyleName("lineBreak");
         
         rta.addValueChangeListener(new ValueChangeListener<String>() {
@@ -96,6 +104,9 @@ public class InlineTextEditor extends CustomComponent {
 			public void buttonClick(com.vaadin.ui.Button.ClickEvent event) {
 				//rta.addStyleName("noBorder");
 				//rta.setReadOnly(true);
+				Conteudo conteudo = dao.findById(idConteudo);
+				conteudo.setConteudo(rta.getValue());
+				dao.update(conteudo);
 				setCompositionRoot(readOnly);
 			}
 		});
@@ -119,9 +130,5 @@ public class InlineTextEditor extends CustomComponent {
     		count++;
     	}
     	text.setValue(saida);
-    }
-    
-    public Label getText() {
-    	return text;
     }
 }

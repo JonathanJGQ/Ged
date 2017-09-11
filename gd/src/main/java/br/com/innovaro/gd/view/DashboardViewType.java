@@ -11,8 +11,8 @@ public enum DashboardViewType {
     		BundleStrings.getString("revisar_documento"), RevisarDocumentoView.class, VaadinIcons.FILE_REFRESH, true), APROVAR(
     		BundleStrings.getString("aprovar_documento"), AprovarDocumentoView.class, VaadinIcons.THUMBS_UP_O, false), REGISTRO(
     		BundleStrings.getString("incluir_registro"),IncluirRegistroView.class,VaadinIcons.CLIPBOARD_TEXT,false),CONFIGURACAO(
-    		BundleStrings.getString("configuracoes"),null,VaadinIcons.COG_O,false),TESTE(
-    				"Teste",null,VaadinIcons.HOME,false);
+    		BundleStrings.getString("configuracoes"),null,VaadinIcons.COG_O,false);
+	/*,TESTE("Teste",null,VaadinIcons.HOME,false);*/
 
     private final String viewName;
     private final Class<? extends View> viewClass;

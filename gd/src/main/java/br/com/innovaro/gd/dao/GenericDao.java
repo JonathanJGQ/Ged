@@ -5,19 +5,14 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
-public class GenericDao<T, ID extends Serializable> {
+import br.com.innovaro.gd.dao.JpaUtil;
 
-	protected static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("ged");
-	protected EntityManager entityManager = entityManagerFactory.createEntityManager();
-	protected EntityTransaction transaction = entityManager.getTransaction();
+public class GenericDao<T, ID extends Serializable> {
 	
 	private final Class<T> classPersistence;
 	
@@ -26,51 +21,107 @@ public class GenericDao<T, ID extends Serializable> {
 		this.classPersistence = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 	
-	public T salva(T object) {
-		transaction.begin();
-		entityManager.persist(object);
-		transaction.commit();
-		entityManager.clear();
-		return object;
+	
+	
+	public T save(T object) {
+		EntityManager entityManager = JpaUtil.getEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			entityManager.persist(object);
+			entityManager.getTransaction().commit();
+			return object;
+			
+		} catch (Exception e) {
+			if(entityManager.isOpen()) {
+				entityManager.getTransaction().rollback();
+			}
+			return null;
+			
+		} finally {
+			if(entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
 	}
 	
-	public T atualiza(T object) {
-		transaction.begin();
-		entityManager.merge(object);
-		transaction.commit();
-		entityManager.clear();
+	public T update(T object) {
+		EntityManager entityManager = JpaUtil.getEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			entityManager.merge(object);
+			entityManager.getTransaction().commit();
+			
+		} catch (Exception e) {
+			if(entityManager.isOpen()) {
+				entityManager.getTransaction().rollback();
+			}
+		} finally {
+			if(entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
 		return null;
 	}
 	
-	public void exclui(ID id) {
-		T object = entityManager.find(getClassPersistence(), id);
-		transaction.begin();
-		entityManager.remove(object);
-		transaction.commit();
-		entityManager.clear();
+	public void delete(ID id) {
+		EntityManager entityManager = JpaUtil.getEntityManager();
+		try {
+			T object = entityManager.find(getClassPersistence(), id);
+			entityManager.getTransaction().begin();
+			entityManager.remove(object);
+			entityManager.getTransaction().commit();
+			
+		} catch (Exception e) {
+			if(entityManager.isOpen()) {
+				entityManager.getTransaction().rollback();
+			}
+		} finally {
+			if(entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<T> buscaTodos(String order){
-		StringBuffer sql = new StringBuffer("SELECT obj FROM "+ getClassPersistence().getSimpleName() +" obj");
-		
-		if(order != null){
-			sql.append(" ORDER BY "+ order);
+	public List<T> findAll(String order){
+		EntityManager entityManager = JpaUtil.getEntityManager();
+		try {
+			StringBuffer sql = new StringBuffer("SELECT obj FROM "+ getClassPersistence().getSimpleName() +" obj");
+			if(order != null){
+				sql.append(" ORDER BY "+ order);
+			}
+			Query query = entityManager.createQuery(sql.toString());
+			return query.getResultList();
+			
+		} catch (Exception e) {
+			if(entityManager.isOpen()) {
+				entityManager.getTransaction().rollback();
+			}
+			return null;
+			
+		} finally {
+			if(entityManager.isOpen()) {
+				entityManager.close();
+			}
 		}
-		
-		Query q = entityManager.createQuery(sql.toString());
-		entityManager.clear();
-		return q.getResultList();
 	}
 	
-	public T buscaPorId(ID id){
-		return entityManager.find(getClassPersistence(), id);
-	}
-	
-	protected Criteria criaCriteria(){
-		Session session = (Session) entityManager.getDelegate();
-		entityManager.clear();
-		return session.createCriteria(getClassPersistence());
+	public T findById(ID id){
+		EntityManager entityManager = JpaUtil.getEntityManager();
+		try {
+			return entityManager.find(getClassPersistence(), id);
+			
+		} catch (Exception e) {
+			if(entityManager.isOpen()) {
+				entityManager.getTransaction().rollback();
+			}
+			return null;
+			
+		} finally {
+			if(entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
 	}
 	
 	public Class<T> getClassPersistence() {
