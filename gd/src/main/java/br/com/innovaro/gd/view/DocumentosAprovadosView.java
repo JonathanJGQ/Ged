@@ -3,6 +3,7 @@ package br.com.innovaro.gd.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -16,39 +17,27 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.com.innovaro.gd.dao.DocumentoDao;
 import br.com.innovaro.gd.model.Documento;
+import br.com.innovaro.gd.type.DocumentoStatusType;
 
 public class DocumentosAprovadosView extends GenericView{
+	
+	private Grid<Documento> grid;
+	private List<Documento> lista;
+	private DocumentoDao documentoDao;
 	
 	public DocumentosAprovadosView() {
 		HorizontalLayout cabecalho = criarCabecalho("Documentos Aprovados", "documentos_aprovados_ajuda");
 		
-		Grid<Documento> grid = new Grid<>();
-		List<Documento> lista = new ArrayList<>();
-		Documento novo = new Documento();
-        novo.setNome("Documento 4");
-        novo.setVersao("1.0");
-        novo.setStatus("Aprovado");
-        
-        Documento novo2 = new Documento();
-        novo2.setNome("Documento 5");
-        novo2.setVersao("1.0");
-        novo2.setStatus("Aprovado");
-        
-        Documento novo3 = new Documento();
-        novo3.setNome("Documento 6");
-        novo3.setVersao("1.0");
-        novo3.setStatus("Aprovado");
-        
-        lista.add(novo);
-        lista.add(novo2);
-        lista.add(novo3);
+		grid = new Grid<>();
+		lista = new ArrayList<>();
+		documentoDao = new DocumentoDao();
         
         grid.setItems(lista);
         grid.addColumn(Documento::getNome).setCaption("Nome");
         grid.addColumn(Documento::getVersao).setCaption("Versão").setWidth(100);
         grid.addColumn(Documento::getStatus).setCaption("Status").setWidth(150);
-        //grid.addStyleName("testeGrid");
         grid.setSizeFull();
         
         grid.addItemClickListener(new ItemClickListener() {
@@ -83,5 +72,11 @@ public class DocumentosAprovadosView extends GenericView{
 		});
         
         addComponents(cabecalho,grid);
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event) {
+		lista = documentoDao.buscaDocumentosPorStatus(DocumentoStatusType.APROVADO.getTitle());
+		grid.setItems(lista);
 	}
 }

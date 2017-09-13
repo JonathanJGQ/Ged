@@ -40,7 +40,7 @@ import br.com.innovaro.gd.type.ItemType;
 @SuppressWarnings({ "serial", "unchecked" })
 public final class EditorAprovarUtil extends VerticalLayout {
 
-    private final ReportEditorRevisarListener listener;
+    private final ReportEditorAprovarListener listener;
     private SortableLayout canvas;
     public List<Component> components;
     private ConteudoDao daoConteudo;
@@ -49,7 +49,7 @@ public final class EditorAprovarUtil extends VerticalLayout {
     private DateField inicio;
     private DateField fim;
 
-    public EditorAprovarUtil(final ReportEditorRevisarListener listener) {
+    public EditorAprovarUtil(final ReportEditorAprovarListener listener) {
     	components = new ArrayList<>();
     	daoConteudo = new ConteudoDao();
     	daoDocumento = new DocumentoDao();
@@ -230,7 +230,7 @@ public final class EditorAprovarUtil extends VerticalLayout {
         } 
     }
 
-    public interface ReportEditorRevisarListener {
+    public interface ReportEditorAprovarListener {
         void titleChanged(String newTitle, EditorAprovarUtil editor);
     }
     
