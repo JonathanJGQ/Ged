@@ -15,6 +15,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import br.com.innovaro.gd.dao.ConteudoDao;
 import br.com.innovaro.gd.model.Conteudo;
+import br.com.innovaro.gd.type.ItemType;
 
 @SuppressWarnings("serial")
 public class InlineTextEditor extends CustomComponent {
@@ -25,12 +26,14 @@ public class InlineTextEditor extends CustomComponent {
     private final Long idConteudo; 
     private final Label text = new Label();
     private final RichTextArea rtaReadOnly = new RichTextArea();
+    private final ItemType itemType;
 
-    public InlineTextEditor(final String initialValue, String textContent, Long idConteudo) {
+    public InlineTextEditor(final String initialValue, String textContent, Long idConteudo, ItemType itemType) {
     	dao = new ConteudoDao();
         setWidth(100.0f, Unit.PERCENTAGE);
         addStyleName("inline-text-editor");
         this.idConteudo = idConteudo;
+        this.itemType = itemType;
 
         if (initialValue != null) {
             editor = buildEditor(initialValue,textContent);
@@ -70,6 +73,10 @@ public class InlineTextEditor extends CustomComponent {
                 setCompositionRoot(editor);
             }
         });
+        
+        if(itemType == ItemType.REVIEW) {
+        	editButton.setVisible(false);
+        }
         
         return result;
     }

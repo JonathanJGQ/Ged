@@ -1,6 +1,7 @@
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\type\DashboardViewType.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\view\UsuarioView.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\editor\EditorRevisarUtil.java
+C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\type\DocumentoStatusType.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\view\IncluirRegistroView.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\view\ModeloRegistroView.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\event\DashboardEvent.java
@@ -23,6 +24,7 @@ C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\view\
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\view\DocumentosAprovadosView.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\dao\JpaUtil.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\model\Modelo.java
+C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\type\ItemType.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\view\EditarModeloDocumentoView.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\dao\SecaoDao.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\event\DashboardEventBus.java
@@ -33,6 +35,7 @@ C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\view\
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\type\DashboardConfigViewType.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\BundleStrings.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\dao\ModeloDao.java
+C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\editor\EditorRevisarView.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\view\NovoRegistroView.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\dao\GenericDao.java
 C:\Users\os\Documents\Jonathan\Git\Ged\gd\src\main\java\br\com\innovaro\gd\model\RegistroCombo.java

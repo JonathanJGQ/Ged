@@ -128,7 +128,7 @@ public class ListarDocumentoView extends GenericView{
 			public void itemClick(ItemClick event) {
 				Documento documento = (Documento)event.getItem();
 				if(documento.getStatus().equals("Em Edição")) {
-					UI.getCurrent().getNavigator().navigateTo("novoDocumento/" + documento.getId() + "/" + documento.getIdTemplate() + "/edita");
+					UI.getCurrent().getNavigator().navigateTo("novoDocumento/" + documento.getId() + "/" + documento.getIdTemplate());
 				}
 			}
 		});
@@ -151,7 +151,7 @@ public class ListarDocumentoView extends GenericView{
 			comboModelo.setValue(lista.get(0));
 		}
 		
-		listaDocumentos = docDao.buscaDocumentosNaoAprovados();
+		listaDocumentos = docDao.buscaDocumentosNaoAprovados("status");
 		grid.setItems(listaDocumentos);
 	}
 	

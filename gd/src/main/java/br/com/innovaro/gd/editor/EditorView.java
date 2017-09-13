@@ -13,21 +13,19 @@ import com.vaadin.ui.TabSheet.CloseHandler;
 
 import br.com.innovaro.gd.dao.ConteudoDao;
 import br.com.innovaro.gd.dao.SecaoDao;
-import br.com.innovaro.gd.editor.EditorUtil.PaletteItemType;
 import br.com.innovaro.gd.editor.EditorUtil.ReportEditorListener;
 import br.com.innovaro.gd.event.DashboardEventBus;
 import br.com.innovaro.gd.model.Conteudo;
 import br.com.innovaro.gd.model.Secao;
+import br.com.innovaro.gd.type.ItemType;
 
 @SuppressWarnings("serial")
-public final class EditorView extends TabSheet implements View, CloseHandler,
-        ReportEditorListener {
+public final class EditorView extends TabSheet implements View, CloseHandler,ReportEditorListener {
 
     public static final String CONFIRM_DIALOG_ID = "confirm-dialog";
     private String valueId;
     private ConteudoDao daoConteudo;
     private String valueIdTemplate;
-    private String estadoDocumento;
     private SecaoDao dao;
     private List<Secao> listaSecao;
     private EditorUtil editorUtil;
@@ -60,7 +58,6 @@ public final class EditorView extends TabSheet implements View, CloseHandler,
     	String args[] = event.getParameters().split("/");
 	    valueId = args[0];
 	    valueIdTemplate = args[1];
-	    estadoDocumento = args[2];
 	    editorUtil.setIdDocumento(Long.parseLong(valueId));
 	    editorUtil.removeComponentes();
 	    listaSecao = dao.buscaSecaoPorModelo(Long.parseLong(valueIdTemplate));
@@ -78,12 +75,12 @@ public final class EditorView extends TabSheet implements View, CloseHandler,
 				conteudo.setIdSecao(lista.get(i-1).getId());
 				conteudo.setIdDocumento(Long.parseLong(valueId));
 				daoConteudo.save(conteudo);
-				editorUtil.addWidget(PaletteItemType.TEXT, lista.get(i-1).getNome(),conteudo.getId());
+				editorUtil.addWidget(ItemType.TEXT, lista.get(i-1).getNome(),conteudo.getId());
 			}
 			else {
 				for(int j=0;j<listaConteudo.size();j++) {
 					if(listaConteudo.get(j).getIdSecao() == lista.get(i-1).getId())
-						editorUtil.addWidget(PaletteItemType.EDIT, lista.get(i-1).getNome(),listaConteudo.get(j).getId());
+						editorUtil.addWidget(ItemType.EDIT, lista.get(i-1).getNome(),listaConteudo.get(j).getId());
 				}
 			}
 		}
@@ -103,5 +100,4 @@ public final class EditorView extends TabSheet implements View, CloseHandler,
 		// TODO Auto-generated method stub
 		
 	}
-
 }

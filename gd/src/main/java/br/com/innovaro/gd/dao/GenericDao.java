@@ -36,20 +36,10 @@ public class GenericDao<T, ID extends Serializable> {
 			entityManager.flush();
 			t.commit();
 			
-//			entityManager.getTransaction().begin();
-//			if(entityManager.getTransaction().isActive()) {
-//				Notification.show("Tá ativo");
-//			}
-//			entityManager.persist(object);
-//			entityManager.getTransaction().commit();
 			return object;
 			
 		} catch (Exception e) {
-//			if(entityManager.getTransaction() != null) {
-//				if(entityManager.getTransaction().isActive()) {
-//					entityManager.getTransaction().rollback();
-//				}
-//			}
+			
 			if(entityManager.isOpen()) {
 				entityManager.getTransaction().rollback();
 				Notification.show(e.getMessage());
