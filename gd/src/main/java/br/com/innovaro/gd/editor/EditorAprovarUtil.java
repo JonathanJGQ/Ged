@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -21,6 +22,7 @@ import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.DragAndDropWrapper.DragStartMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -32,12 +34,13 @@ import br.com.innovaro.gd.dao.ConteudoDao;
 import br.com.innovaro.gd.dao.DocumentoDao;
 import br.com.innovaro.gd.model.Conteudo;
 import br.com.innovaro.gd.model.Documento;
+import br.com.innovaro.gd.type.DocumentoStatusType;
 import br.com.innovaro.gd.type.ItemType;
 
 @SuppressWarnings({ "serial", "unchecked" })
-public final class EditorUtil extends VerticalLayout {
+public final class EditorAprovarUtil extends VerticalLayout {
 
-    private final ReportEditorListener listener;
+    private final ReportEditorRevisarListener listener;
     private SortableLayout canvas;
     public List<Component> components;
     private ConteudoDao daoConteudo;
@@ -46,11 +49,10 @@ public final class EditorUtil extends VerticalLayout {
     private DateField inicio;
     private DateField fim;
 
-    public EditorUtil(final ReportEditorListener listener) {
+    public EditorAprovarUtil(final ReportEditorRevisarListener listener) {
     	components = new ArrayList<>();
     	daoConteudo = new ConteudoDao();
     	daoDocumento = new DocumentoDao();
-    	this.idDocumento = idDocumento;
         this.listener = listener;
         setSizeFull();
         addStyleName("editor");
@@ -65,13 +67,21 @@ public final class EditorUtil extends VerticalLayout {
         setExpandRatio(canvas, 1);
     }
 
+    private VerticalLayout criarCamposObservação() {
+		VerticalLayout layout = new VerticalLayout();
+		Label lblObservacao = new Label("Observações");
+		RichTextArea txtObservacao = new RichTextArea();
+		Button salvarObservacao = new Button("Salvar");
+		layout.setMargin(false);
+		txtObservacao.setWidth(100,Unit.PERCENTAGE);
+		
+		layout.addComponents(lblObservacao,txtObservacao,salvarObservacao);
+		
+		return layout;
+	}
 
 	public void setTitle(final String title) {
         canvas.setTitle(title);
-    }
-    
-    public void setIdDocumento(Long idDocumento) {
-    	this.idDocumento = idDocumento;
     }
     
     private HorizontalLayout criarCamposDatas() {
@@ -81,11 +91,57 @@ public final class EditorUtil extends VerticalLayout {
     	fim = new DateField("Fim do Período de Vigência");
     	layout.setMargin(false);
     	layout.addStyleName("marginTop");
-    	Button enviarRevisão = new Button("Enviar para Revisão");
-    	enviarRevisão.addStyleName(ValoTheme.BUTTON_FRIENDLY);
-    	layout.addComponents(inicio,fim,enviarRevisão);
+    	Button enviarAprovacao = new Button("Aprovar");
+    	Button retornarEdicao = new Button("Retornar para Edição");
+    	enviarAprovacao.addStyleName(ValoTheme.BUTTON_FRIENDLY);
+    	retornarEdicao.addStyleName(ValoTheme.BUTTON_DANGER);
+    	layout.addComponents(inicio,fim,retornarEdicao,enviarAprovacao);
     	
-    	enviarRevisão.addClickListener(new ClickListener() {
+    	retornarEdicao.addClickListener(new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				Window window = new Window();
+				VerticalLayout content = new VerticalLayout();
+				Label lblObservacao = new Label("Observações");
+				RichTextArea txtObservacao = new RichTextArea();
+				HorizontalLayout layoutButtons = new HorizontalLayout();
+				Button btnRetornar = new Button("Salvar");
+				btnRetornar.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+				Button btnCancelar = new Button("Cancelar");
+				
+				btnRetornar.addClickListener(new ClickListener() {
+					@Override
+					public void buttonClick(ClickEvent event) {
+						Documento doc = daoDocumento.findById(idDocumento);
+						doc.setStatus(DocumentoStatusType.EDICAO.getTitle());
+						daoDocumento.update(doc);
+						window.close();
+						UI.getCurrent().getNavigator().navigateTo("Aprovar Documento");
+					}
+				});
+				
+				btnCancelar.addClickListener(new ClickListener() {
+					@Override
+					public void buttonClick(ClickEvent event) {
+						window.close();
+					}
+				});
+				
+				layoutButtons.addComponents(btnRetornar,btnCancelar);
+				
+				window.center();
+				window.setModal(true);
+				window.setResizable(false);
+				window.setWidthUndefined();
+				window.setContent(content);
+				
+				content.addComponents(lblObservacao,txtObservacao,layoutButtons);
+				UI.getCurrent().addWindow(window);
+			
+			}
+		});
+    	
+    	enviarAprovacao.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				janelaConfirmacao();
@@ -94,7 +150,9 @@ public final class EditorUtil extends VerticalLayout {
     	
     	layout.setWidth(94,Unit.PERCENTAGE);
     	layout.setExpandRatio(fim, 1);
-    	layout.setComponentAlignment(enviarRevisão, Alignment.BOTTOM_RIGHT);
+    	layout.setComponentAlignment(retornarEdicao
+    			, Alignment.BOTTOM_RIGHT);
+    	layout.setComponentAlignment(enviarAprovacao, Alignment.BOTTOM_RIGHT);
     	
     	return layout;
     }
@@ -111,8 +169,8 @@ public final class EditorUtil extends VerticalLayout {
         return ddWrap;
     }
 
-    public void addWidget(final ItemType paletteItemType,final Object prefillData, Long idConteudo) {
-        canvas.addComponent(paletteItemType, prefillData,idConteudo);
+    public void addWidget(final ItemType itemType,final Object prefillData, Long idConteudo) {
+        canvas.addComponent(itemType, prefillData,idConteudo);
     }
 
     public final class SortableLayout extends CustomComponent {
@@ -138,7 +196,7 @@ public final class EditorUtil extends VerticalLayout {
                 if (t == null || t.equals("")) {
                     t = " ";
                 }
-                listener.titleChanged(t, EditorUtil.this);
+                listener.titleChanged(t, EditorAprovarUtil.this);
             });
             layout.addComponent(titleLabel);
             
@@ -150,16 +208,16 @@ public final class EditorUtil extends VerticalLayout {
             titleLabel.setValue(title);
         }
 
-        public void addComponent(final ItemType paletteItemType,final Object prefillData, Long idConteudo) {
+        public void addComponent(final ItemType itemType,final Object prefillData, Long idConteudo) {
             //if (placeholder.getParent() != null) {
             //    layout.removeComponent(placeholder);
             //}
-            layout.addComponent(createComponentFromPaletteItem(paletteItemType, prefillData,idConteudo),1);
+            layout.addComponent(createComponentFromPaletteItem(itemType, prefillData,idConteudo),1);
         }
 
         private Component createComponentFromPaletteItem(final ItemType type, final Object prefillData, Long idConteudo) {
             Component result = null;
-            if(type == ItemType.EDIT) {
+            if(type == ItemType.EDIT || type == ItemType.REVIEW) {
             	Conteudo conteudo = daoConteudo.findById(idConteudo);
             	result = new InlineTextEditor(prefillData != null ? String.valueOf(prefillData) : null,conteudo.getConteudo(),idConteudo,type);
                 components.add(result);
@@ -172,21 +230,23 @@ public final class EditorUtil extends VerticalLayout {
         } 
     }
 
-    public interface ReportEditorListener {
-        void titleChanged(String newTitle, EditorUtil editor);
+    public interface ReportEditorRevisarListener {
+        void titleChanged(String newTitle, EditorAprovarUtil editor);
     }
     
     public void removeComponentes() {
-    	inicio.clear();
-    	fim.clear();
     	removeComponent(canvas);
     	canvas = new SortableLayout();
     	canvas.setWidth(100.0f, Unit.PERCENTAGE);
         canvas.addStyleName("canvas");
         addComponent(canvas,1);
     }
-    
-    public void atualizaData() {
+
+	public void setIdDocumento(Long idDocumento) {
+		this.idDocumento = idDocumento;
+	}
+	
+	public void atualizaData() {
 		Documento doc = daoDocumento.findById(idDocumento);
 		if(doc.getVigencia_inicio() != null) {
 			Instant instant = Instant.ofEpochMilli(doc.getVigencia_inicio().getTime());
@@ -199,13 +259,13 @@ public final class EditorUtil extends VerticalLayout {
 			fim.setValue(localDate);
 		}
 	}
-    
-    public void janelaConfirmacao() {
+	
+	public void janelaConfirmacao() {
     	Window window = new Window();
     	
     	VerticalLayout content = new VerticalLayout();
     	HorizontalLayout btnLayout = new HorizontalLayout();
-    	Label text = new Label("Deseja enviar Documento para revisão?");
+    	Label text = new Label("Deseja aprovar este documento?");
     	
     	Button sim = new Button("Sim");
     	sim.setStyleName(ValoTheme.BUTTON_FRIENDLY);
@@ -216,22 +276,21 @@ public final class EditorUtil extends VerticalLayout {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				Documento documento = daoDocumento.findById(idDocumento);
-				if(inicio.getValue() == null) {
-					documento.setVigencia_inicio(new Date());
-				}
-				else {
+				
+				if(inicio.getValue() != null) {
 					Date date = Date.from(inicio.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 					documento.setVigencia_inicio(date);
 				}
+				
 				if(fim.getValue() != null) {
 					Date date = Date.from(fim.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 					documento.setVigencia_fim(date);
 				}
-				documento.setStatus("Em Revisão");
+				documento.setStatus(DocumentoStatusType.APROVADO.getTitle());
 				
 				window.close();
 				daoDocumento.update(documento);
-				UI.getCurrent().getNavigator().navigateTo("Editar Documento");
+				UI.getCurrent().getNavigator().navigateTo("Aprovar Documento");
 			}
 		});
     	

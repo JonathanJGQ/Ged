@@ -290,7 +290,7 @@ public final class EditorRevisarUtil extends VerticalLayout {
 				
 				window.close();
 				daoDocumento.update(documento);
-				UI.getCurrent().getNavigator().navigateTo("Editar Documento");
+				UI.getCurrent().getNavigator().navigateTo("Revisar Documento");
 			}
 		});
     	
