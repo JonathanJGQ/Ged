@@ -12,6 +12,7 @@ public class Conteudo {
 	@GeneratedValue	
 	private Long id;
 	private Long idSecao;
+	private Long idDocumento;
 	@Column(length=10485760, columnDefinition = "text")
 	private String conteudo;
 	
@@ -26,6 +27,12 @@ public class Conteudo {
 	}
 	public void setIdSecao(Long idSecao) {
 		this.idSecao = idSecao;
+	}
+	public Long getIdDocumento() {
+		return idDocumento;
+	}
+	public void setIdDocumento(Long idDocumento) {
+		this.idDocumento = idDocumento;
 	}
 	public String getConteudo() {
 		return conteudo;

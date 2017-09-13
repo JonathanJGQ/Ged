@@ -5,10 +5,13 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+
+import com.vaadin.ui.Notification;
 
 import br.com.innovaro.gd.dao.JpaUtil;
 
@@ -26,14 +29,31 @@ public class GenericDao<T, ID extends Serializable> {
 	public T save(T object) {
 		EntityManager entityManager = JpaUtil.getEntityManager();
 		try {
-			entityManager.getTransaction().begin();
+			
+			EntityTransaction t = entityManager.getTransaction();
+			t.begin();
 			entityManager.persist(object);
-			entityManager.getTransaction().commit();
+			entityManager.flush();
+			t.commit();
+			
+//			entityManager.getTransaction().begin();
+//			if(entityManager.getTransaction().isActive()) {
+//				Notification.show("Tá ativo");
+//			}
+//			entityManager.persist(object);
+//			entityManager.getTransaction().commit();
 			return object;
 			
 		} catch (Exception e) {
+//			if(entityManager.getTransaction() != null) {
+//				if(entityManager.getTransaction().isActive()) {
+//					entityManager.getTransaction().rollback();
+//				}
+//			}
 			if(entityManager.isOpen()) {
 				entityManager.getTransaction().rollback();
+				Notification.show(e.getMessage());
+				e.printStackTrace();
 			}
 			return null;
 			

@@ -42,6 +42,8 @@ public final class EditorUtil extends VerticalLayout {
     private ConteudoDao daoConteudo;
     private DocumentoDao daoDocumento;
     private Long idDocumento;
+    private DateField inicio;
+    private DateField fim;
 
     public EditorUtil(final ReportEditorListener listener) {
     	components = new ArrayList<>();
@@ -53,21 +55,22 @@ public final class EditorUtil extends VerticalLayout {
         addStyleName("editor");
         setMargin(false);
         setSpacing(false);
-        //addStyleName(ValoTheme.DRAG_AND_DROP_WRAPPER_NO_HORIZONTAL_DRAG_HINTS);
-
-        //Component palette = buildPalette();
-        //addComponent(palette);
-        //setComponentAlignment(palette, Alignment.TOP_CENTER);
 
         canvas = new SortableLayout();
         canvas.setWidth(100.0f, Unit.PERCENTAGE);
         canvas.addStyleName("canvas");
         addComponent(criarCamposDatas());
         addComponent(canvas);
+        addComponent(criarAprovadores());
         setExpandRatio(canvas, 1);
     }
 
-    public void setTitle(final String title) {
+    private Component criarAprovadores() {
+    	VerticalLayout aprovadoresLayout = new VerticalLayout();
+		return null;
+	}
+
+	public void setTitle(final String title) {
         canvas.setTitle(title);
     }
     
@@ -78,8 +81,8 @@ public final class EditorUtil extends VerticalLayout {
     private HorizontalLayout criarCamposDatas() {
     	
     	HorizontalLayout layout = new HorizontalLayout();
-    	DateField inicio = new DateField("Início do Período de Vigência");
-    	DateField fim = new DateField("Fim do Período de Vigência");
+    	inicio = new DateField("Início do Período de Vigência");
+    	fim = new DateField("Fim do Período de Vigência");
     	layout.setMargin(false);
     	layout.addStyleName("marginTop");
     	Button enviarRevisão = new Button("Enviar para Revisão");
@@ -89,20 +92,14 @@ public final class EditorUtil extends VerticalLayout {
     	enviarRevisão.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				SimpleDateFormat sdf_aux = new SimpleDateFormat("yyyy-MM-dd");
 				Documento documento = daoDocumento.findById(idDocumento);
-				Calendar cal = Calendar.getInstance();
 				if(inicio.getValue() == null) {
-					Date date = new Date();
-					documento.setVigencia_inicio(date);
+					documento.setVigencia_inicio(new Date());
 				}
 				else {
-				
 					Date date = Date.from(inicio.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 					documento.setVigencia_inicio(date);
 				}
-				
 				if(fim.getValue() != null) {
 					Date date = Date.from(fim.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 					documento.setVigencia_fim(date);
@@ -222,6 +219,8 @@ public final class EditorUtil extends VerticalLayout {
     }
     
     public void removeComponentes() {
+    	inicio.clear();
+    	fim.clear();
     	removeComponent(canvas);
     	canvas = new SortableLayout();
     	canvas.setWidth(100.0f, Unit.PERCENTAGE);

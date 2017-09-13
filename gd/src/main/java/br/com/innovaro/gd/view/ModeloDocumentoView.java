@@ -57,6 +57,8 @@ public class ModeloDocumentoView extends GenericView{
 				Modelo novo = new Modelo();
 				novo.setNome(novoTemplate.getValue());
 				novo.setTotalAprovacoes(1);
+				novoTemplate.clear();
+				novoTemplate.focus();
 				dao.save(novo);
 				lista.add(novo);
 				grid.setItems(lista);
@@ -92,6 +94,7 @@ public class ModeloDocumentoView extends GenericView{
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
+		lista = dao.findAll(null);
 		grid.setItems(lista);
 	}
 }

@@ -13,11 +13,9 @@ public class ConteudoDao extends GenericDao<Conteudo,Long>{
 	@SuppressWarnings("unchecked")
 	public List<Conteudo> buscaConteudosPorDocumento(Long documento_id){
 		EntityManager entityManager = JpaUtil.getEntityManager();
-		Query query = entityManager.createQuery("SELECT c.id, c.conteudo, c.idSecao " +
-												"FROM Modelo m, Secao s, Conteudo c, Documento d " +
-												"WHERE m.id = s.idTemplate AND " +
-												"d.idTemplate = m.id AND " +
-												"c.idSecao = s.id AND " +
+		Query query = entityManager.createQuery("SELECT c.id, c.conteudo, c.idSecao, c.idDocumento " +
+												"FROM Conteudo c, Documento d " +
+												"WHERE d.id = c.idDocumento AND " +
 												"d.id = '"+ documento_id + "'");
 		
 		List<Conteudo>listaConteudo = new ArrayList<>();
@@ -27,6 +25,7 @@ public class ConteudoDao extends GenericDao<Conteudo,Long>{
 			conteudo.setId(Long.parseLong(object[0].toString()));
 			conteudo.setConteudo(object[1].toString());
 			conteudo.setIdSecao(Long.parseLong(object[2].toString()));
+			conteudo.setIdDocumento(Long.parseLong(object[3].toString()));
 			listaConteudo.add(conteudo);
 		}
 		return listaConteudo;

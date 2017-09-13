@@ -20,7 +20,7 @@ import br.com.innovaro.gd.model.Conteudo;
 import br.com.innovaro.gd.model.Secao;
 
 @SuppressWarnings("serial")
-public final class EditorView extends TabSheet implements View, CloseHandler,
+public final class EditorRevisarView extends TabSheet implements View, CloseHandler,
         ReportEditorListener {
 
     public static final String CONFIRM_DIALOG_ID = "confirm-dialog";
@@ -32,7 +32,7 @@ public final class EditorView extends TabSheet implements View, CloseHandler,
     private List<Secao> listaSecao;
     private EditorUtil editorUtil;
     
-    public EditorView() {
+    public EditorRevisarView() {
     	dao = new SecaoDao(); 
     	daoConteudo = new ConteudoDao();
         setSizeFull();

@@ -1,5 +1,7 @@
 package br.com.innovaro.gd.view;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +18,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -25,6 +28,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.ItemClickListener;
+import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 
 import br.com.innovaro.gd.dao.DocumentoDao;
@@ -107,11 +111,13 @@ public class ListarDocumentoView extends GenericView{
         novoDocumentoLayout.addComponents(comboModelo,novoDocumento,documentosAprovados);
         novoDocumentoLayout.setComponentAlignment(documentosAprovados, Alignment.MIDDLE_RIGHT);
         
-        grid = new Grid<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");  
+        
+        grid = new Grid<>(); 
         grid.setItems(listaDocumentos);
         grid.addColumn(Documento::getNome).setCaption("Nome");
-        grid.addColumn(Documento::getVigencia_inicio).setCaption("Inicio").setWidth(90);
-        grid.addColumn(Documento::getVigencia_fim).setCaption("Fim").setWidth(90);
+        Column<Documento, Date> inicioColumn = grid.addColumn(Documento::getVigencia_inicio,new DateRenderer("%1$te/%1$tm/%1$tY")).setCaption("Início").setWidth(140);
+        Column<Documento, Date> fimColumn = grid.addColumn(Documento::getVigencia_fim,new DateRenderer("%1$te/%1$tm/%1$tY")).setCaption("Fim").setWidth(140);
         grid.addColumn(Documento::getVersao).setCaption("Versão").setWidth(90);
         grid.addColumn(Documento::getStatus).setCaption("Status").setWidth(150);
         //grid.addStyleName("testeGrid");
@@ -174,6 +180,7 @@ public class ListarDocumentoView extends GenericView{
 				doc.setStatus("Em Edição");
 				doc.setVersao("1.0");
 				doc.setNome(nomeDocumento.getValue());
+				nomeDocumento.clear();
 				
 				dao.save(doc);
 				UI.getCurrent().getNavigator().navigateTo("novoDocumento/" + doc.getId() + "/" +id + "/novo");

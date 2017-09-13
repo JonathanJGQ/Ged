@@ -12,8 +12,22 @@ public class SecaoDao extends GenericDao<Secao,Long>{
 	@SuppressWarnings("unchecked")
 	public List<Secao> buscaSecaoPorModelo(Long modelo_id){
 		EntityManager entityManager = JpaUtil.getEntityManager();
-		Query query = entityManager.createQuery("FROM Secao WHERE idtemplate = '" + modelo_id + "'");
-		return query.getResultList();
+		try {
+			Query query = entityManager.createQuery("FROM Secao WHERE idtemplate = '" + modelo_id + "'");
+			return query.getResultList();
+		}
+		catch(Exception e) {
+			if(entityManager.getTransaction() != null) {
+				if(entityManager.getTransaction().isActive()) {
+					entityManager.getTransaction().rollback();
+				}
+			}
+			return null;
+		}
+		finally{
+			if(entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
 	}
-	
 }

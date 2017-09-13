@@ -138,6 +138,8 @@ private VerticalLayout adicionarSecao() {
 				Secao secao = new Secao();
 				secao.setIdTemplate(Long.parseLong(value));
 				secao.setNome(novaSecao.getValue());
+				novaSecao.clear();
+				novaSecao.focus();
 				dao.save(secao);
 				lista.add(secao);
 				grid.setItems(lista);

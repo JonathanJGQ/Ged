@@ -24,5 +24,8 @@ public class ModeloDao extends GenericDao<Modelo,Long>{
 		catch (Exception e) {
 			entityManager.getTransaction().rollback();
 		}
+		finally {
+			entityManager.close();
+		}
 	}
 }

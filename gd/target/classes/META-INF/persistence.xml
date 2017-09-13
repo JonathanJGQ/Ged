@@ -10,6 +10,7 @@
 		<class>br.com.innovaro.gd.model.Modelo</class>
 		<class>br.com.innovaro.gd.model.Secao</class>
 		<class>br.com.innovaro.gd.model.Documento</class>
+		<class>br.com.innovaro.gd.model.Conteudo</class>
 		
 		<properties>
 			<property name="javax.persistence.jdbc.driver"
