@@ -18,7 +18,9 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.ItemClickListener;
 
+import br.com.innovaro.gd.dao.ConteudoDao;
 import br.com.innovaro.gd.dao.DocumentoDao;
+import br.com.innovaro.gd.model.Conteudo;
 import br.com.innovaro.gd.model.Documento;
 import br.com.innovaro.gd.type.DocumentoStatusType;
 
@@ -27,6 +29,7 @@ public class DocumentosAprovadosView extends GenericView{
 	private Grid<Documento> grid;
 	private List<Documento> lista;
 	private DocumentoDao documentoDao;
+	private ConteudoDao conteudoDao;
 	
 	public DocumentosAprovadosView() {
 		HorizontalLayout cabecalho = criarCabecalho("Documentos Aprovados", "documentos_aprovados_ajuda");
@@ -34,6 +37,7 @@ public class DocumentosAprovadosView extends GenericView{
 		grid = new Grid<>();
 		lista = new ArrayList<>();
 		documentoDao = new DocumentoDao();
+		conteudoDao = new ConteudoDao();
 
         grid.setItems(lista);
         grid.addColumn(Documento::getNome).setCaption("Nome");
@@ -46,7 +50,7 @@ public class DocumentosAprovadosView extends GenericView{
 				Window window = new Window();
 				FormLayout content = new FormLayout();
 				
-				Documento doc =(Documento) event.getItem();
+				Documento doc = (Documento) event.getItem();
 				
 				Label texto = new Label("Deseja criar uma nova versão para o documento?",ContentMode.HTML);
 				
@@ -61,11 +65,25 @@ public class DocumentosAprovadosView extends GenericView{
 				sim.addClickListener(new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
-						doc.setStatus(DocumentoStatusType.EDICAO.getTitle());
+						Documento novoDocumento = new Documento();
+						novoDocumento.setIdTemplate(doc.getIdTemplate());
+						novoDocumento.setAutor(doc.getAutor());
+						novoDocumento.setNome(doc.getNome());
+						novoDocumento.setStatus(DocumentoStatusType.EDICAO.getTitle());
 						String versao = doc.getVersao();
 						versao = String.valueOf(Float.parseFloat(versao) + 1.0);
-						doc.setVersao(versao);
-						documentoDao.update(doc);
+						novoDocumento.setVersao(versao);
+						documentoDao.save(novoDocumento);
+						List<Conteudo> listaConteudo = conteudoDao.buscaConteudosPorDocumento(doc.getId());
+						for(Conteudo conteudo : listaConteudo) {
+							Conteudo novoConteudo = new Conteudo();
+							novoConteudo.setConteudo(conteudo.getConteudo());
+							novoConteudo.setIdDocumento(novoDocumento.getId());
+							novoConteudo.setIdSecao(conteudo.getIdSecao());
+							conteudoDao.save(novoConteudo);
+						}
+						window.close();
+						UI.getCurrent().getNavigator().navigateTo("novoDocumento/" + novoDocumento.getId() + "/" + novoDocumento.getIdTemplate());
 					}
 				});
 				
