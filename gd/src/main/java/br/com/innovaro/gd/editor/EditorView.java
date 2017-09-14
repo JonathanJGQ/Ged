@@ -12,10 +12,12 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.CloseHandler;
 
 import br.com.innovaro.gd.dao.ConteudoDao;
+import br.com.innovaro.gd.dao.DocumentoDao;
 import br.com.innovaro.gd.dao.SecaoDao;
 import br.com.innovaro.gd.editor.EditorUtil.ReportEditorListener;
 import br.com.innovaro.gd.event.DashboardEventBus;
 import br.com.innovaro.gd.model.Conteudo;
+import br.com.innovaro.gd.model.Documento;
 import br.com.innovaro.gd.model.Secao;
 import br.com.innovaro.gd.type.ItemType;
 
@@ -27,12 +29,15 @@ public final class EditorView extends TabSheet implements View, CloseHandler,Rep
     private ConteudoDao daoConteudo;
     private String valueIdTemplate;
     private SecaoDao dao;
+    private DocumentoDao documentoDao;
     private List<Secao> listaSecao;
     private EditorUtil editorUtil;
+    private Documento documento;
     
     public EditorView() {
     	dao = new SecaoDao(); 
     	daoConteudo = new ConteudoDao();
+    	documentoDao = new DocumentoDao();
         setSizeFull();
         addStyleName("reports");
         setCloseHandler(this);
@@ -62,13 +67,14 @@ public final class EditorView extends TabSheet implements View, CloseHandler,Rep
 	    editorUtil.removeComponentes();
 	    editorUtil.atualizaData();
 	    listaSecao = dao.buscaSecaoPorModelo(Long.parseLong(valueIdTemplate));
+	    documento = documentoDao.findById(Long.parseLong(valueId));
 	    criarSecoes(listaSecao);
     }
     
     private void criarSecoes(List<Secao> lista) {
     	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     	List<Conteudo> listaConteudo = daoConteudo.buscaConteudosPorDocumento(Long.parseLong(valueId));
-    	editorUtil.setTitle("Novo Documento " + (df.format(new Date())) + " (" + getComponentCount() + ")");
+    	editorUtil.setTitle(documento.getNome());
 		for (int i=lista.size();i>0;i--) {
 			if(listaConteudo.size() == 0) {
 				Conteudo conteudo = new Conteudo();
@@ -98,7 +104,6 @@ public final class EditorView extends TabSheet implements View, CloseHandler,Rep
 
 	@Override
 	public void onTabClose(TabSheet tabsheet, Component tabContent) {
-		// TODO Auto-generated method stub
 		
 	}
 }

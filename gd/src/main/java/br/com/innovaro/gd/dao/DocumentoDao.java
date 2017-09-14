@@ -64,4 +64,29 @@ public class DocumentoDao extends GenericDao<Documento,Long>{
 		}
 		return null;
 	}
+	
+	@Override
+	public void delete(Long id) {
+		EntityManager entityManager = JpaUtil.getEntityManager();
+		try {
+			Query query = entityManager.createQuery("DELETE FROM Conteudo WHERE idDocumento = :id");
+			query.setParameter("id", id);
+			
+			entityManager.getTransaction().begin();
+			query.executeUpdate();
+			query = entityManager.createQuery("DELETE FROM Documento WHERE id = :id");
+			query.setParameter("id", id);
+			query.executeUpdate();
+			entityManager.getTransaction().commit();
+			
+		} catch (Exception e) {
+			if(entityManager.isOpen()) {
+				entityManager.getTransaction().rollback();
+			}
+		} finally {
+			if(entityManager.isOpen()) {
+				entityManager.close();
+			}
+		}
+	}
 }

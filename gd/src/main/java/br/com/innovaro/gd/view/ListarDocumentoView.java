@@ -29,6 +29,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.ItemClickListener;
+import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -37,6 +38,7 @@ import br.com.innovaro.gd.dao.DocumentoDao;
 import br.com.innovaro.gd.dao.ModeloDao;
 import br.com.innovaro.gd.model.Documento;
 import br.com.innovaro.gd.model.Modelo;
+import br.com.innovaro.gd.type.DocumentoStatusType;
 	
 public class ListarDocumentoView extends GenericView{
 	
@@ -122,7 +124,24 @@ public class ListarDocumentoView extends GenericView{
         Column<Documento, Date> fimColumn = grid.addColumn(Documento::getVigencia_fim,new DateRenderer("%1$te/%1$tm/%1$tY")).setCaption("Fim").setWidth(140);
         grid.addColumn(Documento::getVersao).setCaption("Versão").setWidth(90);
         grid.addColumn(Documento::getStatus).setCaption("Status").setWidth(150);
-        //grid.addStyleName("testeGrid");
+        grid.addColumn(template -> "X",
+			new ButtonRenderer(clickEvent -> {
+				Notification not = new Notification("Só é permitido deletar documentos com status 'Em Edição'");
+				not.setStyleName(ValoTheme.NOTIFICATION_BAR);
+				not.setPosition(Position.TOP_CENTER);
+				not.setDelayMsec(3000);
+				Documento documento = (Documento) clickEvent.getItem();
+				if(documento.getStatus().equals(DocumentoStatusType.EDICAO.getTitle())) {
+					docDao.delete(documento.getId());
+					listaDocumentos.remove(documento);
+					grid.setItems(listaDocumentos);
+					not.setCaption("Documento deletado!");
+					not.show(Page.getCurrent());
+				}
+				else {
+					not.show(Page.getCurrent());
+				}
+			})).setWidth(65).setCaption("");
         grid.setSizeFull();
         
         grid.addItemClickListener(new ItemClickListener() {
