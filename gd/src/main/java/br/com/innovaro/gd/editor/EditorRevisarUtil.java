@@ -29,6 +29,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.com.innovaro.gd.MyUI;
 import br.com.innovaro.gd.component.InlineTextEditor;
 import br.com.innovaro.gd.dao.ConteudoDao;
 import br.com.innovaro.gd.dao.DocumentoDao;
@@ -116,6 +117,7 @@ public final class EditorRevisarUtil extends VerticalLayout {
 						doc.setStatus(DocumentoStatusType.EDICAO.getTitle());
 						daoDocumento.update(doc);
 						window.close();
+						((MyUI) UI.getCurrent()).updateNotifications();
 						UI.getCurrent().getNavigator().navigateTo("Revisar Documento");
 					}
 				});
@@ -290,6 +292,7 @@ public final class EditorRevisarUtil extends VerticalLayout {
 				
 				window.close();
 				daoDocumento.update(documento);
+				((MyUI) UI.getCurrent()).updateNotifications();
 				UI.getCurrent().getNavigator().navigateTo("Revisar Documento");
 			}
 		});

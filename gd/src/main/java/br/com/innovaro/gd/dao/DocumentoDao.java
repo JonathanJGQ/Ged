@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.vaadin.ui.Notification;
+
 import br.com.innovaro.gd.model.Documento;
 import br.com.innovaro.gd.model.Secao;
 import br.com.innovaro.gd.type.DocumentoStatusType;
@@ -37,6 +39,22 @@ public class DocumentoDao extends GenericDao<Documento,Long>{
 		try {
 			Query query = entityManager.createQuery("FROM Documento WHERE status = '" + type + "'");
 			return query.getResultList();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally{
+			entityManager.close();
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Object contarDocumentosPorStatus(String type){
+		EntityManager entityManager = JpaUtil.getEntityManager();
+		try {
+			Query query = entityManager.createQuery("SELECT COUNT(id) FROM Documento WHERE status = '" + type + "'");
+			return query.getSingleResult();
 		}
 		catch(Exception e) {
 			e.printStackTrace();

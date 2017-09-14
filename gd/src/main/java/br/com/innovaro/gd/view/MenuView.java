@@ -1,43 +1,32 @@
 package br.com.innovaro.gd.view;
 
 import java.io.File;
-import java.util.Collection;
 
 import com.google.common.eventbus.Subscribe;
-import com.vaadin.event.dd.DragAndDropEvent;
-import com.vaadin.event.dd.DropHandler;
-import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.DragAndDropWrapper.DragStartMode;
-import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
-import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.com.innovaro.gd.dao.DocumentoDao;
 import br.com.innovaro.gd.event.DashboardEvent.PostViewChangeEvent;
+import br.com.innovaro.gd.event.DashboardEventBus;
 import br.com.innovaro.gd.type.DashboardConfigViewType;
 import br.com.innovaro.gd.type.DashboardViewType;
-import br.com.innovaro.gd.event.DashboardEventBus;
+import br.com.innovaro.gd.type.DocumentoStatusType;
 
 
 public class MenuView extends CustomComponent{
@@ -45,12 +34,24 @@ public class MenuView extends CustomComponent{
     public static final String REPORTS_BADGE_ID = "cegas-menu-reports-badge";
     public static final String NOTIFICATIONS_BADGE_ID = "cegas-menu-notifications-badge";
     private static final String STYLE_VISIBLE = "valo-menu-visible";
-    private Label notificationsBadge;
     private Label reportsBadge;
     private MenuItem settingsItem;
     private CssLayout configItemsLayout;
-    
+    private Long doc_edicao;
+	private Long doc_revisao;
+	private Long doc_aprovacao;
+    private Label notificationEdicao;
+    private Label notificationRevisao;
+    private Label notificationAprovacao;
+    private DocumentoDao dao;
+	
     public MenuView() {
+    	
+    	dao = new DocumentoDao();
+    	notificationEdicao = new Label();
+    	notificationRevisao = new Label();
+    	notificationAprovacao = new Label();
+    	
         setStyleName("valo-menu");
         setId(ID);
         setSizeUndefined();
@@ -137,19 +138,22 @@ public class MenuView extends CustomComponent{
 
         for (final DashboardViewType view : DashboardViewType.values()) {
         	Component menuItemComponent = botaoItemMenu(view);
+        	
+        	updateNotification();
+        	
+            if(view == DashboardViewType.DOCUMENTO) {
+            	notificationEdicao.setId(NOTIFICATIONS_BADGE_ID);
+                menuItemComponent = buildBadgeWrapper(menuItemComponent,notificationEdicao);
+            }
             
             if(view == DashboardViewType.REVISAR) {
-            	notificationsBadge = new Label();
-                notificationsBadge.setId(NOTIFICATIONS_BADGE_ID);
-                menuItemComponent = buildBadgeWrapper(menuItemComponent,notificationsBadge);
-                notificationsBadge.setValue("4");
+            	notificationRevisao.setId(NOTIFICATIONS_BADGE_ID);
+                menuItemComponent = buildBadgeWrapper(menuItemComponent,notificationRevisao);
             }
             
             if(view == DashboardViewType.APROVAR) {
-            	notificationsBadge = new Label();
-                notificationsBadge.setId(NOTIFICATIONS_BADGE_ID);
-                menuItemComponent = buildBadgeWrapper(menuItemComponent,notificationsBadge);
-                notificationsBadge.setValue("5");
+            	notificationAprovacao.setId(NOTIFICATIONS_BADGE_ID);
+                menuItemComponent = buildBadgeWrapper(menuItemComponent,notificationAprovacao);
             }
             
             menuItemsLayout.addComponent(menuItemComponent);
@@ -246,6 +250,16 @@ public class MenuView extends CustomComponent{
     	return botao;
     }
     
+    public void updateNotification() {
+    	doc_edicao = (Long) dao.contarDocumentosPorStatus(DocumentoStatusType.EDICAO.getTitle());
+    	doc_revisao = (Long) dao.contarDocumentosPorStatus(DocumentoStatusType.REVISAO.getTitle());
+        doc_aprovacao = (Long) dao.contarDocumentosPorStatus(DocumentoStatusType.APROVACAO.getTitle());
+    
+        notificationEdicao.setValue(String.valueOf(doc_edicao));
+        notificationRevisao.setValue(String.valueOf(doc_revisao));
+        notificationAprovacao.setValue(String.valueOf(doc_aprovacao));
+    }
+    
     public final class ValoMenuItemButton extends Button {
 
         private static final String STYLE_SELECTED = "selected";
@@ -276,6 +290,7 @@ public class MenuView extends CustomComponent{
                 addStyleName(STYLE_SELECTED);
             }
         }
+        
     }
     
 }

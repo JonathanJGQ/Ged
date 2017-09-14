@@ -7,6 +7,8 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.ItemClick;
@@ -15,7 +17,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.ItemClickListener;
-import com.vaadin.ui.themes.ValoTheme;
 
 import br.com.innovaro.gd.dao.DocumentoDao;
 import br.com.innovaro.gd.model.Documento;
@@ -33,7 +34,7 @@ public class DocumentosAprovadosView extends GenericView{
 		grid = new Grid<>();
 		lista = new ArrayList<>();
 		documentoDao = new DocumentoDao();
-        
+
         grid.setItems(lista);
         grid.addColumn(Documento::getNome).setCaption("Nome");
         grid.addColumn(Documento::getVersao).setCaption("Versão").setWidth(100);
@@ -47,8 +48,7 @@ public class DocumentosAprovadosView extends GenericView{
 				
 				Documento doc =(Documento) event.getItem();
 				
-				Label texto = new Label("Deseja criar uma nova versão para o documento ahsuahsuahus: " + doc.getNome() + " ?",ContentMode.HTML);
-				texto.addStyleName("lineBreak");
+				Label texto = new Label("Deseja criar uma nova versão para o documento?",ContentMode.HTML);
 				
 				HorizontalLayout btnLayout = new HorizontalLayout();
 				btnLayout.setMargin(false);
@@ -58,11 +58,29 @@ public class DocumentosAprovadosView extends GenericView{
 				btnLayout.setComponentAlignment(sim, Alignment.MIDDLE_CENTER);
 				btnLayout.setComponentAlignment(nao, Alignment.MIDDLE_CENTER);
 				
-				content.addComponents(texto,btnLayout);
-				content.addStyleName("lineBreak");
+				sim.addClickListener(new ClickListener() {
+					@Override
+					public void buttonClick(ClickEvent event) {
+						doc.setStatus(DocumentoStatusType.EDICAO.getTitle());
+						String versao = doc.getVersao();
+						versao = String.valueOf(Float.parseFloat(versao) + 1.0);
+						doc.setVersao(versao);
+						documentoDao.update(doc);
+					}
+				});
 				
-				window.setStyleName(ValoTheme.LAYOUT_HORIZONTAL_WRAPPING);
+				nao.addClickListener(new ClickListener() {
+					@Override
+					public void buttonClick(ClickEvent event) {
+						window.close();
+						
+					}
+				});
+				
+				content.addComponents(texto,btnLayout);
+				
 				window.center();
+				window.setModal(true);
 				window.setWidth(500,Unit.PIXELS);
 				window.setCaption("AVISO");
 				window.setContent(content);	

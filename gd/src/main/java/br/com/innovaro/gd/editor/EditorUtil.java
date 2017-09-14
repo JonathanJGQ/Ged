@@ -27,6 +27,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.com.innovaro.gd.MyUI;
 import br.com.innovaro.gd.component.InlineTextEditor;
 import br.com.innovaro.gd.dao.ConteudoDao;
 import br.com.innovaro.gd.dao.DocumentoDao;
@@ -231,6 +232,7 @@ public final class EditorUtil extends VerticalLayout {
 				
 				window.close();
 				daoDocumento.update(documento);
+				((MyUI) UI.getCurrent()).updateNotifications();
 				UI.getCurrent().getNavigator().navigateTo("Editar Documento");
 			}
 		});

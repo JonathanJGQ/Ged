@@ -19,18 +19,20 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.com.innovaro.gd.dao.DocumentoDao;
 import br.com.innovaro.gd.editor.EditorAprovarView;
 import br.com.innovaro.gd.editor.EditorRevisarView;
 import br.com.innovaro.gd.editor.EditorView;
 import br.com.innovaro.gd.event.DashboardEventBus;
+import br.com.innovaro.gd.type.DocumentoStatusType;
 import br.com.innovaro.gd.view.AjudaView;
 import br.com.innovaro.gd.view.AmbienteView;
-import br.com.innovaro.gd.view.AprovarDocumento;
 import br.com.innovaro.gd.view.AprovarDocumentoView;
 import br.com.innovaro.gd.view.DocumentosAprovadosView;
 import br.com.innovaro.gd.view.EditarModeloDocumentoView;
@@ -50,6 +52,8 @@ public class MyUI extends UI {
 	
 	Navigator navigator;
 	private final DashboardEventBus dashboardEventbus = new DashboardEventBus();
+	private DocumentoDao dao;
+	private MenuView menuView;
 	
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -67,8 +71,10 @@ public class MyUI extends UI {
 		lateralLayout.setHeight(100,Unit.PERCENTAGE);
 		lateralLayout.setWidth(250,Unit.PIXELS);
 		
+		menuView = new MenuView();
+		
 		CssLayout menu = new CssLayout();
-		menu.addComponent(new MenuView());
+		menu.addComponent(menuView);
 		menu.setHeight(100,Unit.PIXELS);
 		menu.setHeight(100,Unit.PERCENTAGE);
 		menu.addStyleName("backColorBlueLight");
@@ -136,5 +142,9 @@ public class MyUI extends UI {
     
     public static DashboardEventBus getDashboardEventbus() {
         return ((MyUI) getCurrent()).dashboardEventbus;
+    }
+    
+    public void updateNotifications() {
+    	menuView.updateNotification();
     }
 }

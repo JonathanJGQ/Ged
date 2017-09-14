@@ -10,6 +10,7 @@ import java.util.Map;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -31,6 +32,7 @@ import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.com.innovaro.gd.MyUI;
 import br.com.innovaro.gd.dao.DocumentoDao;
 import br.com.innovaro.gd.dao.ModeloDao;
 import br.com.innovaro.gd.model.Documento;
@@ -183,6 +185,7 @@ public class ListarDocumentoView extends GenericView{
 				nomeDocumento.clear();
 				
 				dao.save(doc);
+				((MyUI) UI.getCurrent()).updateNotifications();
 				UI.getCurrent().getNavigator().navigateTo("novoDocumento/" + doc.getId() + "/" +id + "/novo");
 				window.close();
 			}
