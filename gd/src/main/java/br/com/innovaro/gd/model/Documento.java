@@ -3,6 +3,7 @@ package br.com.innovaro.gd.model;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,6 +26,8 @@ public class Documento {
 	@Temporal(TemporalType.DATE)
 	private Date vigencia_fim;
 	private String versao;
+	@Column(length=10485760, columnDefinition = "text")
+	private String observacao;
 	
 	public Long getId() {
 		return id;
@@ -74,4 +77,11 @@ public class Documento {
 	public void setVigencia_fim(Date vigencia_fim) {
 		this.vigencia_fim = vigencia_fim;
 	}
+	public String getObservacao() {
+		return observacao;
+	}
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+	
 }

@@ -115,6 +115,7 @@ public final class EditorAprovarUtil extends VerticalLayout {
 					public void buttonClick(ClickEvent event) {
 						Documento doc = daoDocumento.findById(idDocumento);
 						doc.setStatus(DocumentoStatusType.EDICAO.getTitle());
+						doc.setObservacao(txtObservacao.getValue());
 						daoDocumento.update(doc);
 						window.close();
 						((MyUI) UI.getCurrent()).updateNotifications();

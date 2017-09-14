@@ -205,7 +205,7 @@ public class ListarDocumentoView extends GenericView{
 				
 				dao.save(doc);
 				((MyUI) UI.getCurrent()).updateNotifications();
-				UI.getCurrent().getNavigator().navigateTo("novoDocumento/" + doc.getId() + "/" +id + "/novo");
+				UI.getCurrent().getNavigator().navigateTo("novoDocumento/" + doc.getId() + "/" +id);
 				window.close();
 			}
 		});

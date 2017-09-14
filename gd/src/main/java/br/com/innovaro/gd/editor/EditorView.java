@@ -2,14 +2,23 @@ package br.com.innovaro.gd.editor;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.CloseHandler;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 import br.com.innovaro.gd.dao.ConteudoDao;
 import br.com.innovaro.gd.dao.DocumentoDao;
@@ -68,6 +77,9 @@ public final class EditorView extends TabSheet implements View, CloseHandler,Rep
 	    editorUtil.atualizaData();
 	    listaSecao = dao.buscaSecaoPorModelo(Long.parseLong(valueIdTemplate));
 	    documento = documentoDao.findById(Long.parseLong(valueId));
+	    if(documento.getObservacao() != null) {
+	    	criarJanelaObservacao(documento.getObservacao());
+	    }
 	    criarSecoes(listaSecao);
     }
     
@@ -105,5 +117,33 @@ public final class EditorView extends TabSheet implements View, CloseHandler,Rep
 	@Override
 	public void onTabClose(TabSheet tabsheet, Component tabContent) {
 		
+	}
+	
+	private void criarJanelaObservacao(String texto) {
+		Window window = new Window("Observação");
+		VerticalLayout content = new VerticalLayout();
+		Label label = new Label(texto,ContentMode.HTML);
+		RichTextArea txtObservacao = new RichTextArea();
+		txtObservacao.setValue(label.getValue());
+		txtObservacao.setReadOnly(true);
+		txtObservacao.setSizeFull();
+		Button ok = new Button("Ok");
+		ok.setStyleName(ValoTheme.BUTTON_PRIMARY);
+		
+		ok.addClickListener(new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				window.close();
+			}
+		});
+		
+		window.center();
+		window.setResizable(false);
+		window.setModal(true);
+		window.setWidth(50,Unit.PERCENTAGE);
+		
+		content.addComponents(txtObservacao,ok);
+		window.setContent(content);
+		UI.getCurrent().addWindow(window);
 	}
 }
