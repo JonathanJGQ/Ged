@@ -13,6 +13,7 @@ public class Secao {
 	private Long idTemplate;
 	private String nome;
 	private String tipo;
+	private int posicao;
 	
 	
 	public Long getId() {
@@ -38,5 +39,11 @@ public class Secao {
 	}
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	public int getPosicao() {
+		return posicao;
+	}
+	public void setPosicao(int posicao) {
+		this.posicao = posicao;
 	}
 }
