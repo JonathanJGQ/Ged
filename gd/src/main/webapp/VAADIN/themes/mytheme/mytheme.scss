@@ -405,4 +405,14 @@
 		background-color: white;
     	border-style: double;
 	}
+	
+	.nativeButton{
+		border-radius: 50px;
+		color: red;
+		font-weight: bold;
+		background-color: white;
+    	border-style: none;
+    	height: 30px;
+    	padding: 0 8px;
+	}
 }
